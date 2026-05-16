@@ -1,0 +1,20 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="App Icon">
+  <defs>
+    <linearGradient id="gchill" x1="10" y1="10" x2="118" y2="118" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#35d6ff"/>
+      <stop offset="0.55" stop-color="#4f7cff"/>
+      <stop offset="1" stop-color="#9a6cff"/>
+    </linearGradient>
+    <filter id="schill" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="10" stdDeviation="10" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  <rect width="128" height="128" rx="30" fill="url(#gchill)"/>
+  <circle cx="102" cy="24" r="26" fill="white" opacity="0.12"/>
+  <circle cx="24" cy="106" r="34" fill="white" opacity="0.10"/>
+  <g filter="url(#schill)">
+    <path d="M80 19c-18 5-31 22-31 42 0 23 18 42 41 43-8 5-18 8-29 8-27 0-49-22-49-49S34 14 61 14c7 0 13 2 19 5Z" fill="white" opacity="0.92"/>
+    <circle cx="88" cy="37" r="6" fill="#78ffd6"/>
+    <circle cx="101" cy="59" r="4" fill="white" opacity="0.85"/>
+  </g>
+</svg>
