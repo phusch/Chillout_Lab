@@ -590,6 +590,87 @@
       line-height: 1.6;
     }
 
+    .section-tools {
+      display: grid;
+      gap: 12px;
+      justify-items: end;
+    }
+
+    .sort-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .sort-button,
+    .project-order-btn {
+      appearance: none;
+      border: 1px solid rgba(255,255,255,0.22);
+      color: rgba(247, 251, 255, 0.9);
+      background: rgba(255,255,255,0.08);
+      border-radius: 999px;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .sort-button {
+      padding: 10px 14px;
+      min-height: 42px;
+    }
+
+    .sort-button-secondary {
+      color: rgba(247, 251, 255, 0.68);
+      background: rgba(255,255,255,0.045);
+    }
+
+    .sort-button:hover,
+    .project-order-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      background: rgba(53,214,255,0.14);
+      border-color: rgba(255,255,255,0.36);
+    }
+
+    .sort-button:focus-visible,
+    .project-order-btn:focus-visible {
+      outline: 3px solid rgba(120,255,214,0.95);
+      outline-offset: 3px;
+    }
+
+    .sort-hint {
+      color: rgba(247, 251, 255, 0.52);
+      font-size: 0.86rem;
+    }
+
+    .project-order-actions {
+      display: none;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0 0 16px;
+    }
+
+    .project-grid.is-sorting .project-order-actions {
+      display: flex;
+    }
+
+    .project-grid.is-sorting .project {
+      border-color: rgba(120,255,214,0.28);
+    }
+
+    .project-order-btn {
+      padding: 8px 11px;
+      min-height: 36px;
+      font-size: 0.86rem;
+    }
+
+    .project-order-btn:disabled {
+      opacity: 0.36;
+      cursor: not-allowed;
+    }
+
     .project-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -792,6 +873,9 @@
       .project-grid { grid-template-columns: 1fr; }
       .section-head { display: block; }
       .section-head p { margin-top: 10px; }
+      .section-tools { justify-items: stretch; }
+      .sort-toolbar { justify-content: flex-start; }
+      .sort-hint { width: 100%; }
       nav { display: none; }
     }
 
@@ -826,68 +910,20 @@
       </nav>
     </header>
 
-    <main>
-      <div>
-        <div class="eyebrow">
-          <span class="pulse"></span>
-          hosted on Hetzner · linked to GitHub
-        </div>
-
-        <h1>
-          Huschels Digitaler
-          <span class="gradient-text">Chillout Space.</span>
-        </h1>
-
-        <p class="lead">
-          Mein App-Lab zum Aufruf meiner DIY Apps 
-          - direkt per Button.
-        </p>
-
-        <div class="chips" id="chips">
-          <span class="chip" style="--delay: 0s" data-mode="speed">⚡ schnell</span>
-          <span class="chip" style="--delay: .2s" data-mode="glass">🧊 glass UI</span>
-          <span class="chip" style="--delay: .4s" data-mode="responsive">📱 responsive</span>
-          <span class="chip active" style="--delay: .6s" data-mode="animated">🌌 animated</span>
-        </div>
-      </div>
-
-      <div class="showcase" aria-hidden="true">
-        <article class="card mode-animated" id="demoCard">
-          <div class="card-top">
-            <div class="window-dots"><i></i><i></i><i></i></div>
-            <div class="badge" id="chipOutput">🌌 Animation Mode</div>
-          </div>
-
-          <div class="visual">
-            <div class="wave">
-              <span style="--h: 22px; --d: 0s"></span>
-              <span style="--h: 48px; --d: .1s"></span>
-              <span style="--h: 30px; --d: .2s"></span>
-              <span style="--h: 62px; --d: .3s"></span>
-              <span style="--h: 38px; --d: .4s"></span>
-              <span style="--h: 52px; --d: .5s"></span>
-              <span style="--h: 26px; --d: .6s"></span>
-              <span style="--h: 58px; --d: .7s"></span>
-              <span style="--h: 36px; --d: .8s"></span>
-              <span style="--h: 46px; --d: .9s"></span>
-            </div>
-          </div>
-
-          <h2 id="featuredTitle">🌌 Animated Vibes</h2>
-          <p id="featuredDescription">
-            Die Box pulsiert langsamer, dreht Farben sanft und lässt die Equalizer-Bars ruhiger laufen.
-          </p>
-        </article>
-      </div>
-    </main>
-
     <section id="projekte">
       <div class="section-head">
         <h3>Projekte </h3>
-        <p>
-          Jede Anwendung kann direkt über den deutlich hervorgehobenen Button
-          in der jeweiligen Karte. Icons liegen separat im Ordner <strong>icons</strong>.
-        </p>
+        <div class="section-tools">
+          <p>
+            Jede Anwendung kann direkt über den deutlich hervorgehobenen Button
+            in der jeweiligen Karte geöffnet werden. Die Reihenfolge kannst du im Bearbeiten-Modus selbst festlegen.
+          </p>
+          <div class="sort-toolbar" aria-label="Projekt-Reihenfolge verwalten">
+            <button type="button" class="sort-button" id="toggleSortMode">Reihenfolge bearbeiten</button>
+            <button type="button" class="sort-button sort-button-secondary" id="resetProjectOrder">Standard-Reihenfolge</button>
+            <span class="sort-hint" id="orderHint">Aktuelle Sortierung wird auf diesem Gerät gespeichert.</span>
+          </div>
+        </div>
       </div>
 
       <div class="project-grid" id="projectGrid">
@@ -1009,6 +1045,62 @@
         </article>
       </div>
     </section>
+
+
+    <main>
+      <div>
+        <div class="eyebrow">
+          <span class="pulse"></span>
+          hosted on Hetzner · linked to GitHub
+        </div>
+
+        <h1>
+          Huschels Digitaler
+          <span class="gradient-text">Chillout Space.</span>
+        </h1>
+
+        <p class="lead">
+          Mein App-Lab zum Aufruf meiner DIY Apps 
+          - direkt per Button.
+        </p>
+
+        <div class="chips" id="chips">
+          <span class="chip" style="--delay: 0s" data-mode="speed">⚡ schnell</span>
+          <span class="chip" style="--delay: .2s" data-mode="glass">🧊 glass UI</span>
+          <span class="chip" style="--delay: .4s" data-mode="responsive">📱 responsive</span>
+          <span class="chip active" style="--delay: .6s" data-mode="animated">🌌 animated</span>
+        </div>
+      </div>
+
+      <div class="showcase" aria-hidden="true">
+        <article class="card mode-animated" id="demoCard">
+          <div class="card-top">
+            <div class="window-dots"><i></i><i></i><i></i></div>
+            <div class="badge" id="chipOutput">🌌 Animation Mode</div>
+          </div>
+
+          <div class="visual">
+            <div class="wave">
+              <span style="--h: 22px; --d: 0s"></span>
+              <span style="--h: 48px; --d: .1s"></span>
+              <span style="--h: 30px; --d: .2s"></span>
+              <span style="--h: 62px; --d: .3s"></span>
+              <span style="--h: 38px; --d: .4s"></span>
+              <span style="--h: 52px; --d: .5s"></span>
+              <span style="--h: 26px; --d: .6s"></span>
+              <span style="--h: 58px; --d: .7s"></span>
+              <span style="--h: 36px; --d: .8s"></span>
+              <span style="--h: 46px; --d: .9s"></span>
+            </div>
+          </div>
+
+          <h2 id="featuredTitle">🌌 Animated Vibes</h2>
+          <p id="featuredDescription">
+            Die Box pulsiert langsamer, dreht Farben sanft und lässt die Equalizer-Bars ruhiger laufen.
+          </p>
+        </article>
+      </div>
+    </main>
 
     <section id="setup">
       <div class="setup">
@@ -1194,6 +1286,12 @@
     const year = document.getElementById("year");
     const navGithub = document.getElementById("navGithub");
     const projectGrid = document.getElementById("projectGrid");
+    const toggleSortMode = document.getElementById("toggleSortMode");
+    const resetProjectOrder = document.getElementById("resetProjectOrder");
+    const orderHint = document.getElementById("orderHint");
+    const PROJECT_ORDER_STORAGE_KEY = "chilloutLab.projectOrder.v34";
+    let isSortMode = false;
+    let projectsState = [];
     const featuredTitle = document.getElementById("featuredTitle");
     const featuredDescription = document.getElementById("featuredDescription");
     const chipOutput = document.getElementById("chipOutput");
@@ -1228,18 +1326,141 @@
       return iconElement;
     }
 
+    function createProjectId(project, index) {
+      const rawId = project.id || [project.name || "Projekt", project.liveUrl || project.iconUrl || index].join("|");
+      return rawId
+        .toString()
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "") || `projekt-${index + 1}`;
+    }
+
+    function getDefaultProjects() {
+      if (!Array.isArray(CONFIG.projects)) return [];
+
+      return CONFIG.projects
+        .filter((project) => project && project.name)
+        .map((project, index) => ({
+          ...project,
+          _projectId: createProjectId(project, index)
+        }));
+    }
+
+    function loadSavedProjectOrder(defaultProjects) {
+      let savedOrder = [];
+
+      try {
+        savedOrder = JSON.parse(localStorage.getItem(PROJECT_ORDER_STORAGE_KEY) || "[]");
+      } catch (error) {
+        savedOrder = [];
+      }
+
+      if (!Array.isArray(savedOrder) || savedOrder.length === 0) {
+        return defaultProjects;
+      }
+
+      const projectById = new Map(defaultProjects.map((project) => [project._projectId, project]));
+      const sortedProjects = [];
+
+      savedOrder.forEach((projectId) => {
+        const project = projectById.get(projectId);
+        if (project) {
+          sortedProjects.push(project);
+          projectById.delete(projectId);
+        }
+      });
+
+      return [...sortedProjects, ...projectById.values()];
+    }
+
+    function saveProjectOrder() {
+      try {
+        localStorage.setItem(
+          PROJECT_ORDER_STORAGE_KEY,
+          JSON.stringify(projectsState.map((project) => project._projectId))
+        );
+      } catch (error) {
+        if (orderHint) {
+          orderHint.textContent = "Sortierung konnte auf diesem Gerät nicht gespeichert werden.";
+        }
+      }
+    }
+
+    function updateSortControls() {
+      if (toggleSortMode) {
+        toggleSortMode.textContent = isSortMode ? "Fertig" : "Reihenfolge bearbeiten";
+      }
+
+      if (orderHint) {
+        orderHint.textContent = isSortMode
+          ? "Mit den Pfeilen verschiebst du Projekte. Die Reihenfolge bleibt auf diesem Gerät gespeichert."
+          : "Aktuelle Sortierung wird auf diesem Gerät gespeichert.";
+      }
+    }
+
+    function moveProject(fromIndex, toIndex) {
+      if (toIndex < 0 || toIndex >= projectsState.length || fromIndex === toIndex) return;
+
+      const [project] = projectsState.splice(fromIndex, 1);
+      projectsState.splice(toIndex, 0, project);
+      saveProjectOrder();
+      renderProjects();
+    }
+
+    function moveProjectToTop(fromIndex) {
+      moveProject(fromIndex, 0);
+    }
+
+    function createOrderActions(index) {
+      const actions = document.createElement("div");
+      actions.className = "project-order-actions";
+      actions.setAttribute("aria-label", "Projekt verschieben");
+
+      const topButton = document.createElement("button");
+      topButton.type = "button";
+      topButton.className = "project-order-btn";
+      topButton.textContent = "Ganz nach oben";
+      topButton.disabled = index === 0;
+      topButton.addEventListener("click", () => moveProjectToTop(index));
+
+      const upButton = document.createElement("button");
+      upButton.type = "button";
+      upButton.className = "project-order-btn";
+      upButton.textContent = "↑";
+      upButton.title = "Ein Feld nach oben";
+      upButton.disabled = index === 0;
+      upButton.addEventListener("click", () => moveProject(index, index - 1));
+
+      const downButton = document.createElement("button");
+      downButton.type = "button";
+      downButton.className = "project-order-btn";
+      downButton.textContent = "↓";
+      downButton.title = "Ein Feld nach unten";
+      downButton.disabled = index === projectsState.length - 1;
+      downButton.addEventListener("click", () => moveProject(index, index + 1));
+
+      actions.appendChild(topButton);
+      actions.appendChild(upButton);
+      actions.appendChild(downButton);
+
+      return actions;
+    }
+
     function renderProjects() {
-      if (!projectGrid || !Array.isArray(CONFIG.projects) || CONFIG.projects.length === 0) return;
+      if (!projectGrid || !Array.isArray(projectsState) || projectsState.length === 0) return;
 
       const fragment = document.createDocumentFragment();
+      projectGrid.classList.toggle("is-sorting", isSortMode);
 
-      CONFIG.projects.forEach((project) => {
-        if (!project || !project.name) return;
-
+      projectsState.forEach((project, index) => {
         const hasLiveUrl = typeof project.liveUrl === "string" && project.liveUrl.trim().length > 0;
 
         const card = document.createElement("article");
         card.className = hasLiveUrl ? "project" : "project is-empty-slot";
+        card.dataset.projectId = project._projectId;
 
         const icon = createIconElement(project, "project-icon");
 
@@ -1273,6 +1494,7 @@
 
         card.appendChild(icon);
         card.appendChild(title);
+        card.appendChild(createOrderActions(index));
         card.appendChild(description);
         card.appendChild(link);
 
@@ -1282,6 +1504,8 @@
       if (fragment.childNodes.length > 0) {
         projectGrid.replaceChildren(fragment);
       }
+
+      updateSortControls();
     }
 
     function applyMode(modeName) {
@@ -1296,8 +1520,27 @@
       featuredDescription.textContent = mode.description;
     }
 
+    projectsState = loadSavedProjectOrder(getDefaultProjects());
     renderProjects();
     applyMode("animated");
+
+    if (toggleSortMode) {
+      toggleSortMode.addEventListener("click", () => {
+        isSortMode = !isSortMode;
+        renderProjects();
+      });
+    }
+
+    if (resetProjectOrder) {
+      resetProjectOrder.addEventListener("click", () => {
+        try {
+          localStorage.removeItem(PROJECT_ORDER_STORAGE_KEY);
+        } catch (error) {}
+
+        projectsState = getDefaultProjects();
+        renderProjects();
+      });
+    }
 
     document.querySelectorAll(".chip").forEach((chip) => {
       chip.addEventListener("click", () => {
