@@ -827,6 +827,192 @@
       opacity: 0.82;
     }
 
+    .project-actions {
+      display: grid;
+      gap: 10px;
+      margin-top: auto;
+    }
+
+    .project-readme-btn {
+      appearance: none;
+      width: 100%;
+      min-height: 46px;
+      padding: 0 18px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.24);
+      color: rgba(247, 251, 255, 0.86);
+      background: rgba(255,255,255,0.075);
+      font: inherit;
+      font-weight: 850;
+      letter-spacing: -0.02em;
+      cursor: pointer;
+      transition: transform 0.22s ease, background 0.22s ease, border-color 0.22s ease;
+    }
+
+    .project-readme-btn:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.38);
+    }
+
+    .project-readme-btn:focus-visible {
+      outline: 3px solid rgba(120,255,214,0.95);
+      outline-offset: 4px;
+    }
+
+    body.modal-open {
+      overflow: hidden;
+    }
+
+    .readme-modal[hidden] {
+      display: none;
+    }
+
+    .readme-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .readme-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(2, 7, 15, 0.76);
+      backdrop-filter: blur(14px);
+    }
+
+    .readme-dialog {
+      position: relative;
+      width: min(920px, 100%);
+      max-height: min(82vh, 860px);
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(14, 28, 48, 0.98), rgba(8, 17, 31, 0.98));
+      box-shadow: 0 40px 120px rgba(0,0,0,0.5);
+      overflow: hidden;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+    }
+
+    .readme-header,
+    .readme-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 18px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .readme-footer {
+      border-top: 1px solid rgba(255,255,255,0.12);
+      border-bottom: 0;
+      justify-content: flex-end;
+    }
+
+    .readme-title {
+      font-family: "Space Grotesk", "Manrope", sans-serif;
+      font-size: clamp(1.15rem, 3vw, 1.65rem);
+      letter-spacing: -0.04em;
+    }
+
+    .readme-close,
+    .readme-direct {
+      appearance: none;
+      border: 1px solid rgba(255,255,255,0.22);
+      color: rgba(247, 251, 255, 0.88);
+      background: rgba(255,255,255,0.08);
+      border-radius: 999px;
+      min-height: 40px;
+      padding: 0 14px;
+      font: inherit;
+      font-weight: 800;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .readme-close:hover,
+    .readme-direct:hover {
+      transform: translateY(-2px);
+      background: rgba(53,214,255,0.14);
+      border-color: rgba(255,255,255,0.36);
+    }
+
+    .readme-body {
+      overflow: auto;
+      padding: 24px;
+      color: rgba(247, 251, 255, 0.84);
+      line-height: 1.72;
+    }
+
+    .readme-body h1,
+    .readme-body h2,
+    .readme-body h3 {
+      font-family: "Space Grotesk", "Manrope", sans-serif;
+      letter-spacing: -0.045em;
+      margin: 0.9em 0 0.35em;
+      line-height: 1.15;
+    }
+
+    .readme-body h1 { font-size: 2rem; }
+    .readme-body h2 { font-size: 1.55rem; }
+    .readme-body h3 { font-size: 1.28rem; }
+
+    .readme-body p,
+    .readme-body ul,
+    .readme-body ol,
+    .readme-body pre {
+      margin: 0 0 1em;
+    }
+
+    .readme-body ul,
+    .readme-body ol {
+      padding-left: 1.35rem;
+    }
+
+    .readme-body code {
+      padding: 0.12em 0.35em;
+      border-radius: 7px;
+      background: rgba(255,255,255,0.1);
+      color: #ffffff;
+    }
+
+    .readme-body pre {
+      overflow: auto;
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(0,0,0,0.28);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .readme-body pre code {
+      padding: 0;
+      background: transparent;
+    }
+
+    .readme-body a {
+      color: #b9f3ff;
+    }
+
+    .readme-loading {
+      color: rgba(247, 251, 255, 0.62);
+    }
+
+    .readme-frame {
+      width: 100%;
+      min-height: 52vh;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 18px;
+      background: #ffffff;
+    }
+
     .setup {
       border: 1px solid var(--border);
       border-radius: 30px;
@@ -1102,9 +1288,26 @@
       </div>
     </main>
 
+
+    <div class="readme-modal" id="readmeModal" hidden>
+      <div class="readme-backdrop" data-close-readme></div>
+      <article class="readme-dialog" role="dialog" aria-modal="true" aria-labelledby="readmeTitle">
+        <div class="readme-header">
+          <strong class="readme-title" id="readmeTitle">README</strong>
+          <button class="readme-close" type="button" data-close-readme aria-label="README schließen">Schließen</button>
+        </div>
+        <div class="readme-body" id="readmeBody">
+          <p class="readme-loading">README wird geladen …</p>
+        </div>
+        <div class="readme-footer">
+          <a class="readme-direct" id="readmeOpenDirect" href="#" target="_blank" rel="noopener">README direkt öffnen</a>
+        </div>
+      </article>
+    </div>
+
     <section id="setup">
       <div class="setup">
-        <strong>So passt du es an:</strong><br>
+        <strong>Anpassung und neue Anwendungen im Chillout Lab integrieren</strong><br>
         Ganz unten im JavaScript findest du <strong>CONFIG</strong>.
         Dort änderst du pro Anwendung <strong>name</strong>, <strong>description</strong>,
         <strong>liveUrl</strong> und <strong>iconUrl</strong>. Die Bilddateien liegen separat im
@@ -1132,26 +1335,27 @@
         Arbeitspferd-Prinzip:
         - liveUrl ist die fertige GitHub-Pages-Anwendung.
         - iconUrl verweist auf eine einzelne Bilddatei im Ordner icons/.
+        - readmeUrl ist optional. Ohne readmeUrl wird automatisch liveUrl + README.md verwendet.
         - Freie Buttons bleiben sichtbar, öffnen aber nichts, bis du eine liveUrl einträgst.
         - Du kannst SVG oder PNG nutzen, z. B. icons/meine-app.svg oder icons/meine-app.png.
       */
       projects: [
         {
-                "name": "Chillout Pirates",
+                "name": "Chillout Kalk",
                 "icon": "🌙",
                 "iconUrl": "icons/chillout-kalk2.svg",
                 "description": "Kalkulation und Abrechnung der Chillout-Pirates Tour",
                 "liveUrl": "https://phusch.github.io/Chillout_Pirates/",
-                "buttonLabel": "Kalkulation öffnen",
+                "buttonLabel": "Anwendung öffnen",
                 "placeholder": false
         },
         {
                 "name": "PreRide Portfolio",
                 "icon": "🏍️",
                 "iconUrl": "icons/preride-portfolio.svg",
-                "description": "PreRide Check ähnlich der Preflight-Checkliste der Piloten.",
+                "description": "Meine Portfolio-Seite mit unterschiedlichen Entwicklungsstufen, Experimenten und Inhalten ähnlich der Preflight-Checkliste der Piloten.",
                 "liveUrl": "https://phusch.github.io/PreRide_Check/",
-                "buttonLabel": "PreRide öffnen",
+                "buttonLabel": "Anwendung öffnen",
                 "placeholder": false
         },
         {
@@ -1160,25 +1364,25 @@
                 "iconUrl": "icons/wohnungsuebergabe.svg",
                 "description": "Ein Versuch, Wohnungsübergabeprotokolle schneller, sauberer und einfacher zu erstellen.",
                 "liveUrl": "https://phusch.github.io/Wohnungsuebergabe/",
-                "buttonLabel": "Protokoll öffnen",
+                "buttonLabel": "Anwendung öffnen",
                 "placeholder": false
         },
         {
                 "name": "Tour Navigator",
                 "icon": "➕",
                 "iconUrl": "icons/icon-navigation.svg",
-                "description": "Schnelle Direktnavigation zu Zwischenzielen für Navi Apps. Input sind beliebigen gpx-Dateien.",
+                "description": "Schnelle Routennavigation - Direktnavigation zu Zwischenzielen für Apple Carplay ",
                 "liveUrl": "https://phusch.github.io/tour-navigator/",
-                "buttonLabel": "Navigator öffnen",
+                "buttonLabel": "Anwendung öffnen",
                 "placeholder": false
         },
         {
                 "name": "Tour Navigator Modern",
                 "icon": "➕",
                 "iconUrl": "icons/icon-navigation-modern.svg",
-                "description": "Schnelle  - Direktnavigation  Modernere Optik mit verbesserter Usability.",
+                "description": "Schnelle Routennavigation - Direktnavigation zu Zwischenzielen für Apple Carplay. Modernere Version mit neueren Web-Technologien und optimiert für zukünftige Erweiterungen.",
                 "liveUrl": "https://phusch.github.io/tour-navigator-modern/",
-                "buttonLabel": "Navigator öffnen",
+                "buttonLabel": "Anwendung öffnen",
                 "placeholder": false
         },
         {
@@ -1187,16 +1391,16 @@
                 "iconUrl": "icons/chillout-kalk2.svg",
                 "description": "Törnplaner mit icloud Speicherung auf supabase V1.3 vom 7.7.26",
                 "liveUrl": "https://phusch.github.io/toernplaner/",
-                "buttonLabel": "Törnplaner öffnen",
+                "buttonLabel": "Anwendung öffnen",
                 "placeholder": false
         },
         {
                 "name": " Abnehmplaner",
                 "icon": "➕",
                 "iconUrl": "icons/app-slot-04.svg",
-                "description": "Tagebuch zum Abnehmnen mit automatisierter Kalorienzählung auf Basis von OpenFoodAPI.",
+                "description": "Tagebuch zum Abnehmnen mit automatisierter Kalorienzählung auf Basis von OpenFoodAPI. Noch in Entwicklung, aber schon bald hier verfügbar.",
                 "liveUrl": "https://phusch.github.io/abnehmcoach/",
-                "buttonLabel": "Abnehmplaner öffnen",
+                "buttonLabel": "Anwendung öffnen",
                 "placeholder": false
         },
         {
@@ -1296,6 +1500,10 @@
     const featuredDescription = document.getElementById("featuredDescription");
     const chipOutput = document.getElementById("chipOutput");
     const demoCard = document.getElementById("demoCard");
+    const readmeModal = document.getElementById("readmeModal");
+    const readmeTitle = document.getElementById("readmeTitle");
+    const readmeBody = document.getElementById("readmeBody");
+    const readmeOpenDirect = document.getElementById("readmeOpenDirect");
 
     year.textContent = new Date().getFullYear();
     navGithub.href = CONFIG.defaultRepoUrl;
@@ -1449,6 +1657,169 @@
       return actions;
     }
 
+    function buildReadmeUrl(project) {
+      const explicitReadmeUrl = typeof project.readmeUrl === "string" ? project.readmeUrl.trim() : "";
+      if (explicitReadmeUrl) return explicitReadmeUrl;
+
+      const liveUrl = typeof project.liveUrl === "string" ? project.liveUrl.trim() : "";
+      if (!liveUrl) return "";
+
+      try {
+        const url = new URL(liveUrl, window.location.href);
+        if (url.pathname.endsWith("/")) {
+          url.pathname += "README.md";
+        } else if (/\.[^/]+$/.test(url.pathname.split("/").pop() || "")) {
+          url.pathname = url.pathname.replace(/[^/]+$/, "README.md");
+        } else {
+          url.pathname += "/README.md";
+        }
+        url.hash = "";
+        return url.href;
+      } catch (error) {
+        return "";
+      }
+    }
+
+    function escapeHtml(value) {
+      return value
+        .toString()
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function renderInlineMarkdown(value) {
+      return escapeHtml(value)
+        .replace(/`([^`]+)`/g, "<code>$1</code>")
+        .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+        .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    }
+
+    function renderMarkdown(markdownText) {
+      const lines = markdownText.replace(/\r\n/g, "\n").split("\n");
+      const html = [];
+      let listOpen = false;
+      let codeOpen = false;
+      let paragraph = [];
+
+      const closeParagraph = () => {
+        if (paragraph.length > 0) {
+          html.push(`<p>${renderInlineMarkdown(paragraph.join(" "))}</p>`);
+          paragraph = [];
+        }
+      };
+
+      const closeList = () => {
+        if (listOpen) {
+          html.push("</ul>");
+          listOpen = false;
+        }
+      };
+
+      lines.forEach((line) => {
+        const trimmedLine = line.trim();
+
+        if (trimmedLine.startsWith("```")) {
+          closeParagraph();
+          closeList();
+          if (codeOpen) {
+            html.push("</code></pre>");
+            codeOpen = false;
+          } else {
+            html.push("<pre><code>");
+            codeOpen = true;
+          }
+          return;
+        }
+
+        if (codeOpen) {
+          html.push(escapeHtml(line));
+          return;
+        }
+
+        if (!trimmedLine) {
+          closeParagraph();
+          closeList();
+          return;
+        }
+
+        const headingMatch = trimmedLine.match(/^(#{1,3})\s+(.+)$/);
+        if (headingMatch) {
+          closeParagraph();
+          closeList();
+          const level = headingMatch[1].length;
+          html.push(`<h${level}>${renderInlineMarkdown(headingMatch[2])}</h${level}>`);
+          return;
+        }
+
+        const listMatch = trimmedLine.match(/^[-*+]\s+(.+)$/);
+        if (listMatch) {
+          closeParagraph();
+          if (!listOpen) {
+            html.push("<ul>");
+            listOpen = true;
+          }
+          html.push(`<li>${renderInlineMarkdown(listMatch[1])}</li>`);
+          return;
+        }
+
+        paragraph.push(trimmedLine);
+      });
+
+      closeParagraph();
+      closeList();
+      if (codeOpen) html.push("</code></pre>");
+
+      return html.join("\n") || '<p class="readme-loading">Diese README ist leer.</p>';
+    }
+
+    function showReadmeFallback(readmeUrl) {
+      readmeBody.replaceChildren();
+
+      const message = document.createElement("p");
+      message.className = "readme-loading";
+      message.textContent = "Die README konnte nicht als Text geladen werden. Ich zeige sie dir deshalb direkt im Fenster an.";
+
+      const frame = document.createElement("iframe");
+      frame.className = "readme-frame";
+      frame.src = readmeUrl;
+      frame.title = "README direkt anzeigen";
+
+      readmeBody.appendChild(message);
+      readmeBody.appendChild(frame);
+    }
+
+    async function openReadmeModal(project) {
+      const readmeUrl = buildReadmeUrl(project);
+      if (!readmeUrl || !readmeModal || !readmeBody || !readmeTitle || !readmeOpenDirect) return;
+
+      readmeTitle.textContent = `README · ${project.name}`;
+      readmeOpenDirect.href = readmeUrl;
+      readmeBody.innerHTML = '<p class="readme-loading">README wird geladen …</p>';
+      readmeModal.hidden = false;
+      document.body.classList.add("modal-open");
+
+      try {
+        const response = await fetch(readmeUrl, { cache: "no-cache" });
+        if (!response.ok) throw new Error("README nicht gefunden");
+        const markdownText = await response.text();
+        readmeBody.innerHTML = renderMarkdown(markdownText);
+      } catch (error) {
+        showReadmeFallback(readmeUrl);
+      }
+    }
+
+    function closeReadmeModal() {
+      if (!readmeModal) return;
+      readmeModal.hidden = true;
+      document.body.classList.remove("modal-open");
+      if (readmeBody) {
+        readmeBody.innerHTML = '<p class="readme-loading">README wird geladen …</p>';
+      }
+    }
+
     function renderProjects() {
       if (!projectGrid || !Array.isArray(projectsState) || projectsState.length === 0) return;
 
@@ -1492,11 +1863,26 @@
         link.appendChild(linkLabel);
         link.appendChild(linkArrow);
 
+        const projectActions = document.createElement("div");
+        projectActions.className = "project-actions";
+        projectActions.appendChild(link);
+
+        const readmeUrl = buildReadmeUrl(project);
+        if (hasLiveUrl && readmeUrl) {
+          const readmeButton = document.createElement("button");
+          readmeButton.type = "button";
+          readmeButton.className = "project-readme-btn";
+          readmeButton.textContent = "README anzeigen";
+          readmeButton.setAttribute("aria-label", `README für ${project.name} anzeigen`);
+          readmeButton.addEventListener("click", () => openReadmeModal(project));
+          projectActions.appendChild(readmeButton);
+        }
+
         card.appendChild(icon);
         card.appendChild(title);
         card.appendChild(createOrderActions(index));
         card.appendChild(description);
-        card.appendChild(link);
+        card.appendChild(projectActions);
 
         fragment.appendChild(card);
       });
@@ -1541,6 +1927,17 @@
         renderProjects();
       });
     }
+
+
+    document.querySelectorAll("[data-close-readme]").forEach((button) => {
+      button.addEventListener("click", closeReadmeModal);
+    });
+
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && readmeModal && !readmeModal.hidden) {
+        closeReadmeModal();
+      }
+    });
 
     document.querySelectorAll(".chip").forEach((chip) => {
       chip.addEventListener("click", () => {
