@@ -824,7 +824,27 @@
     }
 
     .project.is-empty-slot {
-      opacity: 0.82;
+      opacity: 0.48;
+      background: rgba(7, 13, 26, 0.58);
+      border-color: rgba(255,255,255,0.10);
+      filter: grayscale(0.55) saturate(0.55);
+      box-shadow: 0 16px 42px rgba(0,0,0,0.24);
+    }
+
+    .project.is-empty-slot:hover {
+      transform: none;
+      border-color: rgba(255,255,255,0.12);
+      box-shadow: 0 16px 42px rgba(0,0,0,0.24);
+    }
+
+    .project.is-empty-slot:hover::before {
+      opacity: 0;
+    }
+
+    .project.is-empty-slot .project-icon,
+    .project.is-empty-slot h4,
+    .project.is-empty-slot p {
+      opacity: 0.72;
     }
 
     .project-actions {
@@ -1100,10 +1120,6 @@
       <div class="section-head">
         <h3>Projekte </h3>
         <div class="section-tools">
-          <p>
-            Jede Anwendung kann direkt über den deutlich hervorgehobenen Button
-            in der jeweiligen Karte geöffnet werden. Die Reihenfolge kannst du im Bearbeiten-Modus selbst festlegen.
-          </p>
           <div class="sort-toolbar" aria-label="Projekt-Reihenfolge verwalten">
             <button type="button" class="sort-button" id="toggleSortMode">Reihenfolge bearbeiten</button>
             <button type="button" class="sort-button sort-button-secondary" id="resetProjectOrder">Standard-Reihenfolge</button>
@@ -1353,7 +1369,7 @@
                 "name": "PreRide Portfolio",
                 "icon": "🏍️",
                 "iconUrl": "icons/preride-portfolio.svg",
-                "description": "Meine Portfolio-Seite mit unterschiedlichen Entwicklungsstufen, Experimenten und Inhalten ähnlich der Preflight-Checkliste der Piloten.",
+                "description": "PreRide Check in anwählbaren Entwicklungsstufen - ähnlich des Preflight-Checks von Piloten.",
                 "liveUrl": "https://phusch.github.io/PreRide_Check/",
                 "buttonLabel": "Anwendung öffnen",
                 "placeholder": false
@@ -1380,7 +1396,7 @@
                 "name": "Tour Navigator Modern",
                 "icon": "➕",
                 "iconUrl": "icons/icon-navigation-modern.svg",
-                "description": "Schnelle Routennavigation - Direktnavigation zu Zwischenzielen für Apple Carplay. Modernere Version mit neueren Web-Technologien und optimiert für zukünftige Erweiterungen.",
+                "description": "Schnelle Direktnavigation zu Zwischenzielen für verschiedene Navi Apps aus GPX Import",
                 "liveUrl": "https://phusch.github.io/tour-navigator-modern/",
                 "buttonLabel": "Anwendung öffnen",
                 "placeholder": false
@@ -1395,10 +1411,10 @@
                 "placeholder": false
         },
         {
-                "name": " Abnehmplaner",
+                "name": "Abnehmplaner",
                 "icon": "➕",
                 "iconUrl": "icons/app-slot-04.svg",
-                "description": "Tagebuch zum Abnehmnen mit automatisierter Kalorienzählung auf Basis von OpenFoodAPI. Noch in Entwicklung, aber schon bald hier verfügbar.",
+                "description": "Tagebuch zum Abnehmen mit automatisierter Kalorienzählung auf Basis von OpenFoodAPI und Bildern",
                 "liveUrl": "https://phusch.github.io/abnehmcoach/",
                 "buttonLabel": "Anwendung öffnen",
                 "placeholder": false
@@ -1452,6 +1468,24 @@
                 "name": "Freier Button 10",
                 "icon": "➕",
                 "iconUrl": "icons/app-slot-10.svg",
+                "description": "Freier Platz für eine spätere GitHub-Pages-Anwendung. Name, Beschreibung, Link und Icon kannst du unten in CONFIG ändern.",
+                "liveUrl": "",
+                "buttonLabel": "Noch nicht belegt",
+                "placeholder": true
+        },
+        {
+                "name": "Freier Button 11",
+                "icon": "➕",
+                "iconUrl": "icons/app-slot-11.svg",
+                "description": "Freier Platz für eine spätere GitHub-Pages-Anwendung. Name, Beschreibung, Link und Icon kannst du unten in CONFIG ändern.",
+                "liveUrl": "",
+                "buttonLabel": "Noch nicht belegt",
+                "placeholder": true
+        },
+        {
+                "name": "Freier Button 12",
+                "icon": "➕",
+                "iconUrl": "icons/app-slot-12.svg",
                 "description": "Freier Platz für eine spätere GitHub-Pages-Anwendung. Name, Beschreibung, Link und Icon kannst du unten in CONFIG ändern.",
                 "liveUrl": "",
                 "buttonLabel": "Noch nicht belegt",
