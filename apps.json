@@ -1,0 +1,143 @@
+{
+  "categories": [
+    {
+      "id": "general",
+      "name": "Allgemein"
+    },
+    {
+      "id": "boat",
+      "name": "Boot & Törn"
+    },
+    {
+      "id": "travel",
+      "name": "Reise"
+    },
+    {
+      "id": "moto",
+      "name": "Motorrad & Navigation"
+    },
+    {
+      "id": "tools",
+      "name": "Tools"
+    }
+  ],
+  "projects": [
+    {
+      "id": "chillout-kalk",
+      "name": "Chillout Kalk",
+      "description": "Kalkulation und Abrechnung der Chillout-Pirates Tour",
+      "liveUrl": "https://phusch.github.io/Chillout_Pirates/",
+      "iconUrl": "icons/chillout-kalk2.svg",
+      "emoji": "🌙",
+      "categoryId": "boat"
+    },
+    {
+      "id": "preride",
+      "name": "PreRide Portfolio",
+      "description": "PreRide Check in anwählbaren Entwicklungsstufen – ähnlich des Preflight-Checks von Piloten.",
+      "liveUrl": "https://phusch.github.io/PreRide_Check/",
+      "iconUrl": "icons/preride-portfolio.svg",
+      "emoji": "🏍️",
+      "categoryId": "moto"
+    },
+    {
+      "id": "wohnung",
+      "name": "Wohnungsübergabe Protokoll",
+      "description": "Wohnungsübergabeprotokolle schneller, sauberer und einfacher erstellen.",
+      "liveUrl": "https://phusch.github.io/Wohnungsuebergabe/",
+      "iconUrl": "icons/wohnungsuebergabe.svg",
+      "emoji": "🏠",
+      "categoryId": "tools"
+    },
+    {
+      "id": "route-nav",
+      "name": "Routen Navigator",
+      "description": "Schnelle Routennavigation zu Zwischenzielen für Apple CarPlay.",
+      "liveUrl": "https://phusch.github.io/tour-navigator/",
+      "iconUrl": "icons/icon-navigation.svg",
+      "emoji": "🧭",
+      "categoryId": "moto"
+    },
+    {
+      "id": "route-nav-modern",
+      "name": "Routen Navigator Modern",
+      "description": "Direktnavigation zu Zwischenzielen für verschiedene Navi-Apps aus GPX-Import.",
+      "liveUrl": "https://phusch.github.io/tour-navigator-modern/",
+      "iconUrl": "icons/icon-navigation-modern.svg",
+      "emoji": "🧭",
+      "categoryId": "moto"
+    },
+    {
+      "id": "toernplaner",
+      "name": "Törnplaner",
+      "description": "Törnplaner mit iCloud-Speicherung und Wise-Integration.",
+      "liveUrl": "https://phusch.github.io/toernplaner/",
+      "iconUrl": "icons/chillout-kalk2.svg",
+      "emoji": "⛵",
+      "categoryId": "boat"
+    },
+    {
+      "id": "abnehm",
+      "name": "Abnehmplaner",
+      "description": "Persönlicher AbnehmCoach und Ernährungsplaner.",
+      "liveUrl": "https://phusch.github.io/abnehmcoach/",
+      "iconUrl": "icons/app-slot-04.svg",
+      "emoji": "⚖️",
+      "categoryId": "tools"
+    },
+    {
+      "id": "lugano",
+      "name": "24h solo in Lugano",
+      "description": "Reiseplaner für den Solo-Trip nach Lugano.",
+      "liveUrl": "https://phusch.github.io/Lugano_Solo_Trip/",
+      "iconUrl": "icons/app-slot-05.png",
+      "emoji": "🇨🇭",
+      "categoryId": "travel"
+    },
+    {
+      "id": "rdga-guide",
+      "name": "Wildhogs RdGA Reiseführer",
+      "description": "Reiseplaner und Reiseführer für die Route des Grandes Alpes.",
+      "liveUrl": "https://phusch.github.io/wildhogs-rdga-rep/",
+      "iconUrl": "icons/app-slot-06.png",
+      "emoji": "🏍️",
+      "categoryId": "travel"
+    },
+    {
+      "id": "rdga-abrechnung",
+      "name": "Wildhogs RdGA Abrechnung",
+      "description": "Abrechnung für die Wildhogs RdGA Tour.",
+      "liveUrl": "https://phusch.github.io/rdga_abrechnung/",
+      "iconUrl": "icons/app-slot-07.svg",
+      "emoji": "💶",
+      "categoryId": "travel"
+    },
+    {
+      "id": "rdga-kurven",
+      "name": "Wildhogs RdGA Kurvenanalyse",
+      "description": "Kurven- und Streckenanalyse der Route des Grandes Alpes.",
+      "liveUrl": "https://phusch.github.io/RdGA-Kurvenanalyse/",
+      "iconUrl": "icons/app-slot-08.svg",
+      "emoji": "〰️",
+      "categoryId": "moto"
+    },
+    {
+      "id": "rdga-end",
+      "name": "Wildhogs RdGA Endabrechnung",
+      "description": "Endabrechnung der Wildhogs RdGA Tour.",
+      "liveUrl": "https://phusch.github.io/rdga-endabrechnung/",
+      "iconUrl": "icons/app-slot-09.svg",
+      "emoji": "✅",
+      "categoryId": "travel"
+    },
+    {
+      "id": "skipper",
+      "name": "Friesland 26 Skipper Cockpit",
+      "description": "Skipper Cockpit für die Friesland-Hausboottour 2026.",
+      "liveUrl": "https://phusch.github.io/skipper_cockpit/",
+      "iconUrl": "icons/skipper-app-icon.png",
+      "emoji": "🚤",
+      "categoryId": "boat"
+    }
+  ]
+}
