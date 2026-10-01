@@ -34,7 +34,7 @@
     footer{padding:30px 0 4px;color:rgba(247,251,255,.42);font-size:.84rem;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
     dialog{border:0;padding:0;background:transparent;color:var(--text);max-width:none;max-height:none}dialog::backdrop{background:rgba(2,7,15,.78);backdrop-filter:blur(8px)}.dialog-card{width:min(620px,calc(100vw - 28px));max-height:88vh;overflow:auto;border:1px solid rgba(255,255,255,.2);border-radius:22px;background:linear-gradient(180deg,#10213a,#08111f);box-shadow:0 30px 100px rgba(0,0,0,.55)}.dialog-head{display:flex;justify-content:space-between;align-items:center;padding:17px 18px;border-bottom:1px solid var(--border)}.dialog-head h3{font-size:1.2rem}.close-btn{border:1px solid var(--border);border-radius:999px;background:rgba(255,255,255,.06);color:white;padding:7px 11px}.dialog-body{padding:18px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:grid;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:.8rem;color:var(--muted);font-weight:700}.field input,.field textarea,.field select{width:100%;border:1px solid var(--border);border-radius:11px;background:rgba(255,255,255,.06);color:white;padding:10px 11px}.field textarea{min-height:78px;resize:vertical}.field option{color:#111}.reorder-box{grid-column:1/-1;border:1px solid var(--border);border-radius:13px;padding:11px 12px;background:rgba(255,255,255,.035)}.reorder-title{font-size:.8rem;color:var(--muted);font-weight:700;margin-bottom:8px}.reorder-actions{display:flex;gap:8px;flex-wrap:wrap}.reorder-actions button{border:1px solid var(--border);border-radius:10px;background:rgba(255,255,255,.06);color:white;padding:9px 11px;font-weight:800}.reorder-actions button:disabled{opacity:.35}.dialog-actions{display:flex;justify-content:flex-end;gap:8px;padding:0 18px 18px}.dialog-actions button{border-radius:12px;padding:10px 15px;border:1px solid var(--border);font-weight:800}.save-btn{background:linear-gradient(135deg,var(--cyan),var(--blue));color:white}.danger-btn{background:rgba(255,90,90,.1);color:#ffbaba}.secondary-btn{background:rgba(255,255,255,.06);color:white}.category-list{display:grid;gap:9px}.category-row{display:grid;grid-template-columns:1fr auto auto;gap:8px}.category-row input{border:1px solid var(--border);border-radius:11px;background:rgba(255,255,255,.06);color:white;padding:9px 10px}.small-btn{border:1px solid var(--border);border-radius:10px;background:rgba(255,255,255,.06);color:white;padding:8px 10px}.small-btn.danger{color:#ffbaba}.help{font-size:.8rem;color:var(--muted);margin-top:8px;line-height:1.45}.readme-content{line-height:1.65;color:rgba(247,251,255,.86)}.readme-content h1,.readme-content h2,.readme-content h3{margin:1em 0 .4em}.readme-content p,.readme-content ul,.readme-content pre{margin-bottom:1em}.readme-content ul{padding-left:1.3rem}.readme-content pre{white-space:pre-wrap;background:rgba(0,0,0,.28);padding:12px;border-radius:10px}.readme-content a{color:#b9f3ff}
 
-    .publish-warning{display:none;align-items:center;justify-content:center;gap:10px;margin:0 0 18px;padding:11px 14px;border:1px solid rgba(255,183,77,.5);border-radius:12px;background:rgba(255,153,0,.12);color:#ffd18a;font-weight:800;letter-spacing:.02em}.publish-warning.show{display:flex}.publish-warning strong{color:#fff}.generator-note{margin-top:8px;color:var(--muted);font-size:.86rem;line-height:1.45}.generator-preview{display:flex;align-items:center;gap:14px;padding:12px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.035)}.generator-preview img{width:72px;height:72px;border-radius:16px;object-fit:cover;background:#fff}.generator-preview .placeholder{width:72px;height:72px;border-radius:16px;display:grid;place-items:center;background:var(--panel2);font-size:1.8rem}.tool-btn.icon-pack{border-color:rgba(120,255,214,.35)}
+    .publish-warning{display:none;align-items:center;justify-content:center;gap:10px;margin:0 0 18px;padding:11px 14px;border:1px solid rgba(255,183,77,.5);border-radius:12px;background:rgba(255,153,0,.12);color:#ffd18a;font-weight:800;letter-spacing:.02em}.publish-warning.show{display:flex}.publish-warning strong{color:#fff}.warning-check{margin-left:auto;border:1px solid rgba(255,255,255,.28);border-radius:999px;background:rgba(255,255,255,.08);color:#fff;padding:6px 10px;font-weight:800;cursor:pointer}.warning-check:hover{background:rgba(255,255,255,.14)}.generator-note{margin-top:8px;color:var(--muted);font-size:.86rem;line-height:1.45}.generator-preview{display:flex;align-items:center;gap:14px;padding:12px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.035)}.generator-preview img{width:72px;height:72px;border-radius:16px;object-fit:cover;background:#fff}.generator-preview .placeholder{width:72px;height:72px;border-radius:16px;display:grid;place-items:center;background:var(--panel2);font-size:1.8rem}.tool-btn.icon-pack{border-color:rgba(120,255,214,.35)}
     @media(max-width:1050px){.project-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
     @media(max-width:780px){.project-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}}
     @media(max-width:520px){.page{width:min(100% - 20px,1240px)}.project-grid{grid-template-columns:1fr}.hero h1{font-size:2.65rem}.project{min-height:205px}.project-icon{width:64px;height:64px}.toolbar-actions{width:100%}.tool-btn{flex:1}}
@@ -42,17 +42,17 @@
 </head>
 <body>
   <div class="page">
-    <header><div class="brand"><div class="logo">🌙</div><span>Chillout Lab</span><span class="version-badge">V3.7.1</span></div><a class="header-link" href="https://github.com/phusch" target="_blank" rel="noopener">GitHub</a></header>
+    <header><div class="brand"><div class="logo">🌙</div><span>Chillout Lab</span><span class="version-badge">V3.8</span></div><a class="header-link" href="https://github.com/phusch" target="_blank" rel="noopener">GitHub</a></header>
     <section class="hero"><h1>Huschels Digitaler <span>Chillout Space.</span></h1><p>Mein App-Lab zum direkten Aufruf meiner DIY Apps.</p></section>
-    <div class="publish-warning" id="publishWarning" role="status">⚠ <strong>NICHT VERÖFFENTLICHT</strong> · Lokale Änderungen warten noch auf GitHub.</div>
+    <div class="publish-warning" id="publishWarning" role="status">⚠ <strong>NICHT VERÖFFENTLICHT</strong> · Lokale Änderungen warten noch auf GitHub.<button class="warning-check" id="checkGithubBtn" type="button">GitHub prüfen</button></div>
     <section>
       <div class="toolbar">
         <div class="tabs" id="categoryTabs" aria-label="Kategorien"></div>
-        <div class="toolbar-actions"><button class="tool-btn" id="manageCategoriesBtn" type="button">Kategorien</button><button class="tool-btn icon-pack" id="homeIconPackBtn" type="button">Home-Screen-Paket</button><button class="tool-btn" id="exportGithubBtn" type="button">GitHub-Dateien erstellen</button><button class="tool-btn primary" id="addAppBtn" type="button">＋ App hinzufügen</button></div>
+        <div class="toolbar-actions"><button class="tool-btn" id="manageCategoriesBtn" type="button">Kategorien</button><button class="tool-btn icon-pack" id="homeIconPackBtn" type="button">Home-Screen-Icon</button><button class="tool-btn" id="exportGithubBtn" type="button">GitHub-Dateien erstellen</button><button class="tool-btn primary" id="addAppBtn" type="button">＋ App hinzufügen</button></div>
       </div>
       <div class="project-grid" id="projectGrid"></div>
     </section>
-    <footer><span>© <span id="year"></span> Chillout Lab · V3.7.1</span><span id="dataStatus">GitHub-Stand</span><span>hosted on Hetzner · linked to GitHub</span></footer>
+    <footer><span>© <span id="year"></span> Chillout Lab · V3.8</span><span id="dataStatus">GitHub-Stand</span><span>hosted on Hetzner · linked to GitHub</span></footer>
   </div>
 
   <dialog id="appDialog"><form method="dialog" class="dialog-card" id="appForm"><div class="dialog-head"><h3 id="appDialogTitle">App hinzufügen</h3><button class="close-btn" id="closeAppDialog" type="button">Schließen</button></div><div class="dialog-body"><div class="form-grid">
@@ -67,20 +67,18 @@
     <div class="reorder-box" id="appReorderBox" hidden><div class="reorder-title">Reihenfolge in dieser Kategorie</div><div class="reorder-actions"><button id="moveAppEarlierBtn" type="button">← Nach vorne</button><button id="moveAppLaterBtn" type="button">Nach hinten →</button></div><div class="help">Die Reihenfolge wird lokal gespeichert und beim nächsten „GitHub-Dateien erstellen“ dauerhaft in apps.json übernommen.</div></div>
   </div></div><div class="dialog-actions"><button class="danger-btn" id="deleteAppBtn" type="button" hidden>App löschen</button><button class="secondary-btn" id="cancelAppBtn" type="button">Abbrechen</button><button class="save-btn" id="saveAppBtn" value="default" type="submit">Speichern</button></div></form></dialog>
 
-  <dialog id="homeIconDialog"><div class="dialog-card"><div class="dialog-head"><h3>Home-Screen-Paket erzeugen</h3><button class="close-btn" id="closeHomeIconDialog" type="button">Schließen</button></div><div class="dialog-body"><div class="form-grid">
-    <div class="field full"><label for="homeAppName">App-Name</label><input id="homeAppName" placeholder="z. B. SkipperCockpit"></div>
-    <div class="field"><label for="homeShortName">Kurzname (optional)</label><input id="homeShortName" maxlength="18" placeholder="z. B. Skipper"></div>
-    <div class="field"><label for="homeThemeColor">Theme-Farbe</label><input id="homeThemeColor" type="color" value="#08111f"></div>
-    <div class="field full"><label for="homeMasterIcon">Master-Icon · PNG/JPG/WebP · quadratisch · mindestens 512×512 px</label><input id="homeMasterIcon" type="file" accept="image/png,image/jpeg,image/webp"></div>
-    <div class="field full"><div class="generator-preview"><div class="placeholder" id="homeIconPlaceholder">📱</div><img id="homeIconPreview" alt="Icon-Vorschau" hidden><div><strong id="homeIconInfo">Noch kein Icon gewählt</strong><div class="generator-note">Automatisch erzeugt: 32, 180, 192 und 512 Pixel sowie manifest.json.</div></div></div></div>
-  </div></div><div class="dialog-actions"><button class="secondary-btn" id="cancelHomeIconBtn" type="button">Abbrechen</button><button class="save-btn" id="createHomeIconPackBtn" type="button">ZIP erzeugen</button></div></div></dialog>
+  <dialog id="homeIconDialog"><div class="dialog-card"><div class="dialog-head"><h3>Home-Screen-Icon erzeugen</h3><button class="close-btn" id="closeHomeIconDialog" type="button">Schließen</button></div><div class="dialog-body"><div class="form-grid">
+    <div class="field full"><label for="homeProjectSelect">App auswählen</label><select id="homeProjectSelect"></select></div>
+    <div class="field full"><div class="generator-preview"><div class="placeholder" id="homeIconPlaceholder">📱</div><img id="homeIconPreview" alt="Icon-Vorschau" hidden><div><strong id="homeIconInfo">App auswählen</strong><div class="generator-note">Das bereits im Chillout Lab hinterlegte App-Icon wird automatisch verwendet. Es wird nur <code>apple-touch-icon.png</code> erzeugt. Diese Datei lädst du ins Hauptverzeichnis des jeweiligen App-Repositories.</div></div></div></div>
+  </div></div><div class="dialog-actions"><button class="secondary-btn" id="cancelHomeIconBtn" type="button">Abbrechen</button><button class="save-btn" id="createHomeIconPackBtn" type="button">Icon erzeugen</button></div></div></dialog>
 
   <dialog id="categoryDialog"><div class="dialog-card"><div class="dialog-head"><h3>Kategorien verwalten</h3><button class="close-btn" id="closeCategoryDialog" type="button">Schließen</button></div><div class="dialog-body"><div class="category-list" id="categoryList"></div><button class="tool-btn primary" id="addCategoryBtn" type="button" style="margin-top:14px">＋ Kategorie hinzufügen</button><p class="help">„Alle Apps“ bleibt immer erhalten. Eigene Kategorien kannst du frei benennen. Beim Löschen werden enthaltene Apps nach „Allgemein“ verschoben.</p></div></div></dialog>
 
   <dialog id="readmeDialog"><div class="dialog-card" style="width:min(900px,calc(100vw - 28px))"><div class="dialog-head"><h3 id="readmeTitle">README</h3><button class="close-btn" id="closeReadmeDialog" type="button">Schließen</button></div><div class="dialog-body readme-content" id="readmeContent"><p>README wird geladen …</p></div></div></dialog>
 
 <script>
-const STORAGE_KEY='chilloutLabDraftV5';
+const STORAGE_KEY='chilloutLabDraftV6';
+const LEGACY_STORAGE_KEY='chilloutLabDraftV5';
 const CONFIG_URL='apps.json';
 const DEFAULT_DATA={
   categories:[
@@ -109,19 +107,45 @@ const DEFAULT_DATA={
 let data=clone(DEFAULT_DATA);let activeCategory='all';let editingId=null;let hasLocalDraft=false;
 const $=id=>document.getElementById(id);
 function clone(v){return JSON.parse(JSON.stringify(v))}
-async function loadData(){
-  try{
-    const local=JSON.parse(localStorage.getItem(STORAGE_KEY));
-    if(local&&Array.isArray(local.categories)&&Array.isArray(local.projects)){data=local;hasLocalDraft=true;updateDataStatus();return}
-  }catch(e){}
-  try{
-    const r=await fetch(CONFIG_URL+'?v='+Date.now(),{cache:'no-store'});
-    if(r.ok){const remote=await r.json();if(remote&&Array.isArray(remote.categories)&&Array.isArray(remote.projects)){data=remote;hasLocalDraft=false;updateDataStatus();return}}
-  }catch(e){}
-  data=clone(DEFAULT_DATA);hasLocalDraft=false;updateDataStatus();
+function validData(v){return !!(v&&Array.isArray(v.categories)&&Array.isArray(v.projects))}
+function canonical(v){if(Array.isArray(v))return v.map(canonical);if(v&&typeof v==='object'){const o={};Object.keys(v).sort().forEach(k=>o[k]=canonical(v[k]));return o}return v}
+function sameData(a,b){try{return JSON.stringify(canonical(a))===JSON.stringify(canonical(b))}catch(e){return false}}
+function getDraft(){
+  try{const raw=JSON.parse(localStorage.getItem(STORAGE_KEY));if(raw&&raw.dirty&&validData(raw.data))return raw}catch(e){}
+  return null;
 }
-function saveData(){localStorage.setItem(STORAGE_KEY,JSON.stringify(data));hasLocalDraft=true;updateDataStatus()}
+function getLegacyDraft(){try{const raw=JSON.parse(localStorage.getItem(LEGACY_STORAGE_KEY));return validData(raw)?raw:null}catch(e){return null}}
+function clearLocalDraft(){localStorage.removeItem(STORAGE_KEY);localStorage.removeItem(LEGACY_STORAGE_KEY);hasLocalDraft=false;updateDataStatus()}
+async function fetchRemoteData(){const r=await fetch(CONFIG_URL+'?v='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);const remote=await r.json();if(!validData(remote))throw new Error('Ungültige apps.json');return remote}
+async function loadData(){
+  const draft=getDraft();
+  const legacy=getLegacyDraft();
+  try{
+    const remote=await fetchRemoteData();
+    if(draft){
+      if(sameData(draft.data,remote)){data=remote;clearLocalDraft();return}
+      data=draft.data;hasLocalDraft=true;updateDataStatus();return;
+    }
+    // Alte V3.7.1-Entwürfe waren die Ursache für veraltete Geräte-Stände.
+    // Sobald GitHub erreichbar ist, hat deshalb der veröffentlichte Stand Vorrang.
+    if(legacy)localStorage.removeItem(LEGACY_STORAGE_KEY);
+    data=remote;hasLocalDraft=false;updateDataStatus();return;
+  }catch(e){
+    if(draft){data=draft.data;hasLocalDraft=true;updateDataStatus();return}
+    if(legacy){data=legacy;hasLocalDraft=true;updateDataStatus();return}
+    data=clone(DEFAULT_DATA);hasLocalDraft=false;updateDataStatus();
+  }
+}
+function saveData(){localStorage.setItem(STORAGE_KEY,JSON.stringify({dirty:true,data}));hasLocalDraft=true;updateDataStatus()}
 function updateDataStatus(){const el=$('dataStatus');if(el)el.textContent=hasLocalDraft?'● Lokale Änderungen – noch nicht veröffentlicht':'☁ GitHub-Stand';const warning=$('publishWarning');if(warning)warning.classList.toggle('show',hasLocalDraft)}
+async function checkGithubStatus(){
+  try{
+    const remote=await fetchRemoteData();
+    if(!hasLocalDraft){data=remote;renderAll();updateDataStatus();alert('GitHub-Stand wurde neu geladen.');return}
+    if(sameData(data,remote)){data=remote;clearLocalDraft();renderAll();alert('Alles veröffentlicht. Der GitHub-Stand entspricht deinen lokalen Änderungen.');return}
+    if(confirm('Die apps.json auf GitHub unterscheidet sich noch von deinen lokalen Änderungen.\n\nSoll stattdessen der GitHub-Stand geladen und der lokale Entwurf verworfen werden?')){data=remote;clearLocalDraft();renderAll()}
+  }catch(e){alert('GitHub konnte gerade nicht geprüft werden. Bitte Internetverbindung und apps.json im Repository prüfen.')}
+}
 function uid(prefix){return prefix+'-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7)}
 function escapeHtml(v=''){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function buildReadmeUrl(p){if(p.readmeUrl)return p.readmeUrl;if(!p.liveUrl)return '';try{const u=new URL(p.liveUrl,location.href);u.pathname=u.pathname.endsWith('/')?u.pathname+'README.md':u.pathname.replace(/[^/]*$/,'README.md');u.hash='';return u.href}catch(e){return ''}}
@@ -151,24 +175,20 @@ function exportGithubFiles(){
   const clean=clone(data);
   const json=JSON.stringify(clean,null,2)+'\n';
   downloadBlob('apps.json',new Blob([json],{type:'application/json;charset=utf-8'}));
-  alert('apps.json wurde erstellt.\n\nLade diese Datei in dein Chillout-Lab-Repository und ersetze dort die vorhandene apps.json. Neue, über die App ausgewählte Icons sind bereits direkt in dieser Datei enthalten. Danach sehen Mac, iPad und iPhone beim nächsten Laden denselben Stand.');
+  alert('apps.json wurde erstellt.\n\nLade diese Datei in dein Chillout-Lab-Repository und ersetze dort die vorhandene apps.json. Neue, über die App ausgewählte Icons sind bereits direkt in dieser Datei enthalten. Danach die Chillout-Lab-Seite neu laden oder auf „GitHub prüfen“ klicken. Mac, iPad und iPhone übernehmen dann denselben GitHub-Stand.');
 }
 $('exportGithubBtn').onclick=exportGithubFiles;
+$('checkGithubBtn').onclick=checkGithubStatus;
 
 
-function crc32(bytes){let crc=-1;for(let i=0;i<bytes.length;i++){crc^=bytes[i];for(let j=0;j<8;j++)crc=(crc>>>1)^((crc&1)?0xEDB88320:0)}return (crc^(-1))>>>0}
-function u16(n){return [n&255,(n>>>8)&255]}
-function u32(n){return [n&255,(n>>>8)&255,(n>>>16)&255,(n>>>24)&255]}
-function makeStoreZip(files){const enc=new TextEncoder();const chunks=[];const central=[];let offset=0;for(const f of files){const name=enc.encode(f.name);const body=f.data instanceof Uint8Array?f.data:enc.encode(String(f.data));const crc=crc32(body);const local=new Uint8Array([80,75,3,4,20,0,0,0,0,0,0,0,0,0,...u32(crc),...u32(body.length),...u32(body.length),...u16(name.length),0,0,...name]);chunks.push(local,body);const cen=new Uint8Array([80,75,1,2,20,0,20,0,0,0,0,0,0,0,0,0,...u32(crc),...u32(body.length),...u32(body.length),...u16(name.length),0,0,0,0,0,0,0,0,0,0,0,0,...u32(offset),...name]);central.push(cen);offset+=local.length+body.length}const centralOffset=offset;let centralSize=0;central.forEach(c=>{chunks.push(c);centralSize+=c.length});chunks.push(new Uint8Array([80,75,5,6,0,0,0,0,...u16(files.length),...u16(files.length),...u32(centralSize),...u32(centralOffset),0,0]));return new Blob(chunks,{type:'application/zip'})}
-function safeFileName(v){return (v||'app').trim().replace(/[^a-zA-Z0-9äöüÄÖÜß_-]+/g,'-').replace(/^-+|-+$/g,'')||'app'}
-function loadImageFile(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=reject;img.src=r.result};r.onerror=reject;r.readAsDataURL(file)})}
-function canvasPng(img,size){return new Promise(resolve=>{const c=document.createElement('canvas');c.width=size;c.height=size;const ctx=c.getContext('2d');ctx.clearRect(0,0,size,size);ctx.drawImage(img,0,0,size,size);c.toBlob(async b=>resolve(new Uint8Array(await b.arrayBuffer())),'image/png')})}
-let homeMasterImage=null;
-$('homeIconPackBtn').onclick=()=>{$('homeAppName').value='';$('homeShortName').value='';$('homeThemeColor').value='#08111f';$('homeMasterIcon').value='';$('homeIconPreview').hidden=true;$('homeIconPlaceholder').hidden=false;$('homeIconInfo').textContent='Noch kein Icon gewählt';homeMasterImage=null;$('homeIconDialog').showModal()};
-function closeHomeIconDialog(){$('homeIconDialog').close();homeMasterImage=null}
-$('closeHomeIconDialog').onclick=closeHomeIconDialog;$('cancelHomeIconBtn').onclick=closeHomeIconDialog;
-$('homeMasterIcon').onchange=async()=>{const f=$('homeMasterIcon').files[0];if(!f){homeMasterImage=null;return}try{const img=await loadImageFile(f);homeMasterImage=img;$('homeIconPreview').src=img.src;$('homeIconPreview').hidden=false;$('homeIconPlaceholder').hidden=true;$('homeIconInfo').textContent=`${img.naturalWidth} × ${img.naturalHeight} px`;if(img.naturalWidth!==img.naturalHeight||img.naturalWidth<512){$('homeIconInfo').textContent+=' · ungeeignet';alert('Bitte verwende ein quadratisches Icon mit mindestens 512 × 512 Pixel.')}}catch(e){homeMasterImage=null;alert('Das Icon konnte nicht gelesen werden.')}};
-$('createHomeIconPackBtn').onclick=async()=>{const name=$('homeAppName').value.trim();if(!name){alert('Bitte zuerst den App-Namen eingeben.');return}if(!homeMasterImage){alert('Bitte zuerst ein Master-Icon auswählen.');return}if(homeMasterImage.naturalWidth!==homeMasterImage.naturalHeight||homeMasterImage.naturalWidth<512){alert('Das Master-Icon muss quadratisch und mindestens 512 × 512 Pixel groß sein.');return}const shortName=$('homeShortName').value.trim()||name.slice(0,18);const theme=$('homeThemeColor').value||'#08111f';const [i32,i180,i192,i512]=await Promise.all([32,180,192,512].map(s=>canvasPng(homeMasterImage,s)));const manifest={name,short_name:shortName,start_url:'./',scope:'./',display:'standalone',background_color:theme,theme_color:theme,icons:[{src:'icon-192.png',sizes:'192x192',type:'image/png'},{src:'icon-512.png',sizes:'512x512',type:'image/png',purpose:'any maskable'}]};const notes=`Diese Zeilen in den <head>-Bereich deiner index.html einfügen:\n\n<link rel="manifest" href="manifest.json">\n<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">\n<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">\n<meta name="theme-color" content="${theme}">\n\nAlle Dateien aus diesem ZIP in das Hauptverzeichnis des GitHub-Repositories der App laden.\nDanach GitHub Pages neu laden und die App auf iPhone/iPad über „Teilen → Zum Home-Bildschirm“ neu hinzufügen.\n\nErzeugt mit Chillout Lab V3.7.1.`;const files=[{name:'apple-touch-icon.png',data:i180},{name:'icon-192.png',data:i192},{name:'icon-512.png',data:i512},{name:'favicon-32.png',data:i32},{name:'manifest.json',data:JSON.stringify(manifest,null,2)+'\n'},{name:'EINBAU-HINWEISE.txt',data:notes}];downloadBlob(safeFileName(name)+'_HomeScreen_Paket.zip',makeStoreZip(files));closeHomeIconDialog()};
+function loadImageSource(src){return new Promise((resolve,reject)=>{if(!src){reject(new Error('Kein Icon'));return}const img=new Image();if(/^https?:/i.test(src))img.crossOrigin='anonymous';img.onload=()=>resolve(img);img.onerror=reject;img.src=src})}
+function canvasPngBlob(img,size){return new Promise(resolve=>{const c=document.createElement('canvas');c.width=size;c.height=size;const ctx=c.getContext('2d');ctx.clearRect(0,0,size,size);const scale=Math.min(size/img.naturalWidth,size/img.naturalHeight);const w=img.naturalWidth*scale,h=img.naturalHeight*scale;ctx.drawImage(img,(size-w)/2,(size-h)/2,w,h);c.toBlob(resolve,'image/png')})}
+function fillHomeProjectSelect(){const s=$('homeProjectSelect');s.innerHTML='';data.projects.forEach(p=>{const o=document.createElement('option');o.value=p.id;o.textContent=p.name;s.appendChild(o)});updateHomeIconPreview()}
+async function updateHomeIconPreview(){const p=data.projects.find(x=>x.id===$('homeProjectSelect').value);if(!p)return;const src=p.iconData||p.iconUrl||'';$('homeIconInfo').textContent=p.name;const preview=$('homeIconPreview'),placeholder=$('homeIconPlaceholder');if(src){preview.src=src;preview.hidden=false;placeholder.hidden=true;preview.onerror=()=>{preview.hidden=true;placeholder.hidden=false;placeholder.textContent=p.emoji||'📱'}}else{preview.hidden=true;placeholder.hidden=false;placeholder.textContent=p.emoji||'📱'}}
+$('homeIconPackBtn').onclick=()=>{fillHomeProjectSelect();$('homeIconDialog').showModal()};
+function closeHomeIconDialog(){$('homeIconDialog').close()}
+$('closeHomeIconDialog').onclick=closeHomeIconDialog;$('cancelHomeIconBtn').onclick=closeHomeIconDialog;$('homeProjectSelect').onchange=updateHomeIconPreview;
+$('createHomeIconPackBtn').onclick=async()=>{const p=data.projects.find(x=>x.id===$('homeProjectSelect').value);if(!p)return;const src=p.iconData||p.iconUrl;if(!src){alert('Für diese App ist kein Bild-Icon hinterlegt. Bitte zuerst über „App bearbeiten“ ein Icon auswählen.');return}try{const img=await loadImageSource(src);const blob=await canvasPngBlob(img,180);if(!blob)throw new Error('PNG');downloadBlob('apple-touch-icon.png',blob);alert('apple-touch-icon.png wurde erzeugt.\n\nDiese eine Datei ins Hauptverzeichnis des Repositories von „'+p.name+'“ laden. Danach die App auf iPhone/iPad vom Home-Bildschirm entfernen und neu über Safari → Teilen → Zum Home-Bildschirm hinzufügen.');closeHomeIconDialog()}catch(e){alert('Das hinterlegte Icon konnte nicht verarbeitet werden. Verwende am besten ein lokal hochgeladenes PNG/JPG/WebP oder SVG im Chillout Lab.')}};
 
 $('manageCategoriesBtn').onclick=()=>{renderCategoryManager();$('categoryDialog').showModal()};$('closeCategoryDialog').onclick=()=>$('categoryDialog').close();$('addCategoryBtn').onclick=()=>{const c={id:uid('cat'),name:'Neue Kategorie'};data.categories.push(c);saveData();renderCategoryManager();renderTabs()};
 function simpleMarkdown(md){return escapeHtml(md).replace(/^### (.*)$/gm,'<h3>$1</h3>').replace(/^## (.*)$/gm,'<h2>$1</h2>').replace(/^# (.*)$/gm,'<h1>$1</h1>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>').replace(/^- (.*)$/gm,'<div>• $1</div>').replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')}
