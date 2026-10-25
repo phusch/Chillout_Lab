@@ -91,7 +91,7 @@
       </section>
       <section class="hs-card"><h2>🎨 Icons verkleinern</h2>
         <button type="button" id="hsOptimizeIcons" class="hs-btn">Vorhandene Icons optimieren</button>
-        <p class="hs-small">Komprimiert eingebettete Bilder der <em>aktuell geöffneten</em> App-Daten auf maximal 180 × 180 Pixel (WebP). App-Namen, Links, Kategorien und externe Icon-Dateien bleiben unverändert. Bei alten privaten oder lokalen Datenständen zuerst laden, dann hier optimieren und bewusst neu speichern.</p>
+        <p class="hs-small">Komprimiert eingebettete Bilder der <em>aktuell geöffneten</em> App-Daten auf maximal 180 × 180 Pixel (WebP, bei Safari automatisch PNG/JPEG). App-Namen, Links, Kategorien und externe Icon-Dateien bleiben unverändert. Bei alten privaten oder lokalen Datenständen zuerst laden, dann hier optimieren und bewusst neu speichern.</p>
       </section>
       <section class="hs-card"><h2>Backup</h2>
         <div class="hs-cols"><button type="button" id="hsExport" class="hs-btn">JSON-Backup erstellen</button><button type="button" id="hsImport" class="hs-btn">JSON-Backup laden</button></div>
@@ -111,7 +111,7 @@
     <div class="field"><label for="appCategory">Kategorie</label><select id="appCategory"></select></div>
     <div class="field"><label for="appEmoji">Emoji als Ersatzicon</label><input id="appEmoji" maxlength="8" placeholder="🚤"></div>
     <div class="field full"><label for="appIconUrl">Icon-Pfad oder URL</label><input id="appIconUrl" placeholder="icons/mein-icon.png oder https://..."></div>
-    <div class="field full"><label for="appIconFile">Oder Icon-Datei auswählen</label><input id="appIconFile" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml"><div class="help">Neue Icons werden automatisch auf maximal 180 × 180 Pixel verkleinert und platzsparend als WebP gespeichert. Kleine SVGs bleiben erhalten.</div></div>
+    <div class="field full"><label for="appIconFile">Oder Icon-Datei auswählen</label><input id="appIconFile" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml"><div class="help">Neue Icons werden automatisch auf maximal 180 × 180 Pixel verkleinert (WebP, falls nicht unterstützt PNG/JPEG). Kleine SVGs bleiben erhalten.</div></div>
     <div class="reorder-box" id="appReorderBox" hidden><div class="reorder-title">Reihenfolge in dieser Kategorie</div><div class="reorder-actions"><button id="moveAppEarlierBtn" type="button">← Nach vorne</button><button id="moveAppLaterBtn" type="button">Nach hinten →</button></div><div class="help">Die Reihenfolge wird lokal gespeichert und beim nächsten „GitHub-Dateien erstellen“ dauerhaft in apps.json übernommen.</div></div>
   </div></div><div class="dialog-actions"><button class="danger-btn" id="deleteAppBtn" type="button" hidden>App löschen</button><button class="secondary-btn" id="cancelAppBtn" type="button">Abbrechen</button><button class="save-btn" id="saveAppBtn" value="default" type="submit">Speichern</button></div></form></dialog>
 
@@ -225,15 +225,28 @@ function loadEmbeddedImage(uri){
     image.src=uri;
   });
 }
+// WebP ist nicht in jedem Browser als Canvas-Ausgabe verfügbar (z. B. Safari).
+// Deshalb bei fehlender WebP-ENCODIERUNG automatisch PNG/JPEG verwenden.
+// Das Bildformat wird anhand des tatsächlichen data:-Präfixes geprüft.
 async function iconToSmallWebp(uri){
   const image=await loadEmbeddedImage(uri);
   if(!image.naturalWidth||!image.naturalHeight)throw Error('Ungültige Icon-Abmessungen.');
-  // Bereits ausreichend kleine WebP-Dateien werden verlustfrei unverändert gelassen.
-  if(uri.startsWith('data:image/webp;base64,') &&
+  // Schon kleine, eingebettete Rasterbilder nicht nochmals verlustbehaftet kodieren.
+  if(/^data:image\/(webp|png|jpeg);base64,/i.test(uri) &&
      Math.max(image.naturalWidth,image.naturalHeight)<=ICON_MAX_EDGE &&
      dataUriBytes(uri)<=ICON_TARGET_BYTES) return uri;
   let smallest=null;
-  for(const edge of ICON_SIZES){
+  let webpSupported=true;
+  // Kleinere Stufen garantieren auch bei komplexen transparenten PNG-Icons
+  // eine kompakte Datei, ohne die Transparenz zu verlieren.
+  const sizes=[180,160,128,112,96,80,64];
+  const consider=value=>{
+    if(!/^data:image\/(webp|png|jpeg);base64,/i.test(value))return false;
+    const size=dataUriBytes(value);
+    if(!smallest||size<smallest.size)smallest={value,size};
+    return size<=ICON_TARGET_BYTES;
+  };
+  for(const edge of sizes){
     const ratio=Math.min(1,edge/Math.max(image.naturalWidth,image.naturalHeight));
     const canvas=document.createElement('canvas');
     canvas.width=Math.max(1,Math.round(image.naturalWidth*ratio));
@@ -242,15 +255,38 @@ async function iconToSmallWebp(uri){
     if(!ctx)throw Error('Canvas wird auf diesem Gerät nicht unterstützt.');
     ctx.clearRect(0,0,canvas.width,canvas.height);
     ctx.drawImage(image,0,0,canvas.width,canvas.height);
-    for(const quality of ICON_QUALITY){
-      const webp=canvas.toDataURL('image/webp',quality);
-      if(!webp.startsWith('data:image/webp;base64,'))
-        throw Error('Dieser Browser unterstützt keinen WebP-Export. Icon nicht verändert.');
-      const size=dataUriBytes(webp);
-      if(!smallest || size<smallest.size) smallest={value:webp,size};
-      if(size<=ICON_TARGET_BYTES)return webp;
+    if(webpSupported){
+      for(const quality of ICON_QUALITY){
+        const webp=canvas.toDataURL('image/webp',quality);
+        // Safari kann hier trotz angefordertem WebP ein PNG zurückgeben.
+        if(!webp.startsWith('data:image/webp;base64,')){
+          webpSupported=false;
+          break;
+        }
+        if(consider(webp))return webp;
+      }
+    }
+    if(!webpSupported){
+      const png=canvas.toDataURL('image/png');
+      if(consider(png))return png;
+      // JPEG nur für wirklich deckende Bilder: keine Transparenz verlieren.
+      let opaque=false;
+      try{
+        const rgba=ctx.getImageData(0,0,canvas.width,canvas.height).data;
+        opaque=true;
+        for(let i=3;i<rgba.length;i+=4){
+          if(rgba[i]!==255){opaque=false;break;}
+        }
+      }catch(_err){opaque=false}
+      if(opaque){
+        for(const quality of ICON_QUALITY){
+          const jpg=canvas.toDataURL('image/jpeg',quality);
+          if(consider(jpg))return jpg;
+        }
+      }
     }
   }
+  if(!smallest)throw Error('Dieses Icon konnte auf dem Gerät nicht in PNG, JPEG oder WebP exportiert werden.');
   return smallest.value;
 }
 async function fileToIconData(file){
