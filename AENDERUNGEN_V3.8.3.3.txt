@@ -1,0 +1,46 @@
+CHILLOUT LAB – V3.8.3.3 TEST (Automatische Supabase-Anmeldung)
+============================================================
+
+VERBINDLICHE AUSGANGSBASIS
+  Ausschließlich: Chillout_Lab(1).zip (vom Nutzer freigegebene lauffähige MASTER-Datei).
+  Keine älteren Projektstände als Codebasis.
+
+GEÄNDERTE DATEIEN
+  huschel-speicher.js:
+    - Supabase Auth-Sitzung wird im selben Browser dauerhaft gespeichert.
+    - Access Token wird bei Bedarf automatisch erneuert.
+    - Beim Neustart wird die gespeicherte Sitzung mit Supabase getUser() geprüft;
+      nur die freigegebene Benutzer-ID erhält den grünen Anmeldestatus.
+    - Bei Abmeldung wird das Sitzungstoken im Browser gelöscht.
+    - Verständliche Statusanzeigen für Login und abgebrochene GitHub-Aktionen.
+  index.html:
+    - Erklärung des dauerhaften Logins und getrennte Anmeldeanzeige.
+  huschel-speicher.css:
+    - Grüne Anmeldebestätigung, zusätzliche Statusfarben.
+
+NICHT GEÄNDERT
+  apps.json, Icons, App-Karten, Links, Kategorien, bestehende
+  Supabase Edge Function, GitHub-Revisionsschutz, Speicher- und Backup-Daten.
+
+INSTALLATION
+  1. Sicherheitskopie des aktuell veröffentlichten Chillout Labs behalten.
+  2. Aus diesem Paket die drei geänderten Dateien ins App-Repository übernehmen:
+       index.html
+       huschel-speicher.js
+       huschel-speicher.css
+     Die anderen Dateien sind ausschließlich zur vollständigen App-Auslieferung enthalten.
+  3. App im normalen Safari-Tab öffnen und EINMALIG neu anmelden.
+  4. Seite neu laden: der grüne Anmeldestatus sollte ohne Passwort erscheinen.
+  5. GitHub Laden / Speichern kontrollieren (kein automatischer Datenabruf).
+  6. „Abmelden“ betätigen und neu laden: die Anmeldung darf NICHT mehr aktiv sein.
+
+SICHERHEIT
+  Die Sitzung (Supabase-Tokens, nicht das Passwort) wird im Browser gespeichert.
+  Diese Tokens sind auf einem gemeinsam genutzten oder kompromittierten Gerät
+  zugänglich; auf fremden Geräten unbedingt „Abmelden“ verwenden.
+  Safari Privatmodus / gelöschte Websitedaten können die Sitzung entfernen.
+  Private GitHub-Daten bleiben ausschließlich im privaten Repository.
+
+TESTSTAND
+  Node Syntaxprüfung und simulierte Login-/Neustart-/Logout-/UID-Tests bestanden.
+  Echte Supabase-/Safari-Prüfung nach Veröffentlichung noch offen.
