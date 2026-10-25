@@ -39,10 +39,11 @@
     @media(max-width:780px){.project-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}}
     @media(max-width:520px){.page{width:min(100% - 20px,1240px)}.project-grid{grid-template-columns:1fr}.hero h1{font-size:2.65rem}.project{min-height:205px}.project-icon{width:64px;height:64px}.toolbar-actions{width:100%}.tool-btn{flex:1}}
   </style>
+  <link rel="stylesheet" href="huschel-speicher.css" />
 </head>
 <body>
-  <div class="page">
-    <header><div class="brand"><div class="logo">🌙</div><span>Chillout Lab</span><span class="version-badge">V3.8</span></div><a class="header-link" href="https://github.com/phusch" target="_blank" rel="noopener">GitHub</a></header>
+  <div class="page" id="labMainPage">
+    <header><div class="brand"><div class="logo">🌙</div><span>Chillout Lab</span><span class="version-badge">V3.8</span></div><button type="button" class="hs-launch" id="hsOpen" title="Speichern & Backup" aria-label="Speichern und Backup öffnen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h12l4 4v14H3V3h2Z"/><path d="M7 3v7h10V3M7 21v-8h10v8M10 16h4"/></svg><span class="hs-launch-text">Speicher</span></button><a class="header-link" href="https://github.com/phusch" target="_blank" rel="noopener">GitHub</a></header>
     <section class="hero"><h1>Huschels Digitaler <span>Chillout Space.</span></h1><p>Mein App-Lab zum direkten Aufruf meiner DIY Apps.</p></section>
     <div class="publish-warning" id="publishWarning" role="status">⚠ <strong>NICHT VERÖFFENTLICHT</strong> · Lokale Änderungen warten noch auf GitHub.<button class="warning-check" id="checkGithubBtn" type="button">GitHub prüfen</button></div>
     <section>
@@ -55,6 +56,53 @@
     <footer><span>© <span id="year"></span> Chillout Lab · V3.8</span><span id="dataStatus">GitHub-Stand</span><span>hosted on Hetzner · linked to GitHub</span></footer>
   </div>
 
+
+  <!-- Huschel Speicher: eigenständige Zusatzansicht, bestehende Hauptseite bleibt erhalten -->
+  <section id="hsStorageView" class="hs-view" hidden aria-label="Speichern und Backup">
+    <div class="hs-shell">
+      <div class="hs-top"><button type="button" id="hsBack" class="hs-back" aria-label="Zurück zur App">← Zurück</button><div><h1>Speichern &amp; Backup</h1><p>Huschel App Speicher · Chillout Lab</p></div></div>
+      <div id="hsLamp" class="hs-lamp pending" role="status" aria-live="polite">🟡 GitHub-Speicher noch nicht geprüft</div>
+      <div id="hsMeta" class="hs-meta">Revision: – · Letzte GitHub-Speicherung: –</div>
+      <p id="hsPublishedStatus" class="hs-source-status" role="status" aria-live="polite">Öffentliche apps.json wird beim Öffnen überprüft.</p>
+      <section id="hsSourceConflict" class="hs-source-conflict" hidden aria-label="Abweichende Datenstände">
+        <h2>⚠ Unterschiedliche Datenstände</h2>
+        <p id="hsConflictText"></p>
+        <button type="button" class="hs-btn hs-safe-choice" id="hsUsePublished">Aktuelle apps.json übernehmen</button>
+        <button type="button" class="hs-btn hs-risk-choice" id="hsUsePrivate">Privaten Speicherstand trotzdem laden</button>
+        <button type="button" class="hs-btn" id="hsCancelConflict">Abbrechen – nichts ändern</button>
+      </section>
+      <section class="hs-card hs-cloud"><h2>☁ GitHub – bevorzugter Speicher</h2>
+        <button type="button" id="hsGithubSave" class="hs-btn hs-primary">☁️ GitHub Speichern</button>
+        <button type="button" id="hsGithubLoad" class="hs-btn hs-outline">☁️ GitHub Laden</button>
+        <p class="hs-small">Vor der ersten Speicherung bitte einmal GitHub laden. Deine Daten liegen privat in <code>chillout-lab/data.json</code>.</p>
+      </section>
+      <section class="hs-card"><h2>🔐 Anmeldung</h2>
+        <div id="hsLoggedIn" class="hs-small" hidden>Angemeldet als <strong id="hsLoggedEmail"></strong></div>
+        <div id="hsLoginFields"><label for="hsKey">Supabase Publishable Key</label><input id="hsKey" type="text" placeholder="sb_publishable_…" spellcheck="false" autocomplete="off">
+          <label for="hsEmail">E-Mail</label><input id="hsEmail" type="email" value="huschka@eventdesign.com" autocomplete="username">
+          <label for="hsPassword">Passwort</label><input id="hsPassword" type="password" autocomplete="current-password">
+          <button type="button" id="hsLogin" class="hs-btn">Anmelden</button></div>
+        <button type="button" id="hsLogout" class="hs-btn" hidden>Abmelden</button>
+        <p class="hs-small">Nur Publishable Key – niemals GitHub-Token oder Secret Key eingeben. Das Passwort wird nicht gespeichert; die Anmeldung gilt für diesen Seitenaufruf.</p>
+      </section>
+      <section class="hs-card"><h2>Auf diesem Gerät</h2>
+        <div class="hs-cols"><button type="button" id="hsLocalSave" class="hs-btn">Lokal speichern</button><button type="button" id="hsLocalLoad" class="hs-btn">Lokal laden</button></div>
+        <p class="hs-small">Separate Gerätekopie im Browser (IndexedDB). Deine bestehende Chillout-Lab-Speicherung bleibt erhalten.</p>
+      </section>
+      <section class="hs-card"><h2>🎨 Icons verkleinern</h2>
+        <button type="button" id="hsOptimizeIcons" class="hs-btn">Vorhandene Icons optimieren</button>
+        <p class="hs-small">Komprimiert eingebettete Bilder der <em>aktuell geöffneten</em> App-Daten auf maximal 180 × 180 Pixel (WebP). App-Namen, Links, Kategorien und externe Icon-Dateien bleiben unverändert. Bei alten privaten oder lokalen Datenständen zuerst laden, dann hier optimieren und bewusst neu speichern.</p>
+      </section>
+      <section class="hs-card"><h2>Backup</h2>
+        <div class="hs-cols"><button type="button" id="hsExport" class="hs-btn">JSON-Backup erstellen</button><button type="button" id="hsImport" class="hs-btn">JSON-Backup laden</button></div>
+        <input type="file" id="hsFile" accept=".json,application/json" hidden>
+        <p class="hs-small">Ein geladenes Backup wird zuerst nur in die App übernommen. GitHub wird erst durch „GitHub Speichern“ verändert.</p>
+      </section>
+      <section class="hs-card"><h2>Speichermeldungen</h2><p id="hsMessage" class="hs-message" aria-live="polite">Bereit.</p></section>
+      <p class="hs-note">Hinweis: Das bisherige „GitHub-Dateien erstellen“ und der Hinweis „Nicht veröffentlicht“ auf der Hauptseite beziehen sich weiterhin auf die öffentliche <code>apps.json</code>. Der neue private GitHub-Speicher ist davon unabhängig.</p>
+    </div>
+  </section>
+
   <dialog id="appDialog"><form method="dialog" class="dialog-card" id="appForm"><div class="dialog-head"><h3 id="appDialogTitle">App hinzufügen</h3><button class="close-btn" id="closeAppDialog" type="button">Schließen</button></div><div class="dialog-body"><div class="form-grid">
     <div class="field full"><label for="appName">Name</label><input id="appName" required></div>
     <div class="field full"><label for="appDescription">Beschreibung</label><textarea id="appDescription"></textarea></div>
@@ -63,7 +111,7 @@
     <div class="field"><label for="appCategory">Kategorie</label><select id="appCategory"></select></div>
     <div class="field"><label for="appEmoji">Emoji als Ersatzicon</label><input id="appEmoji" maxlength="8" placeholder="🚤"></div>
     <div class="field full"><label for="appIconUrl">Icon-Pfad oder URL</label><input id="appIconUrl" placeholder="icons/mein-icon.png oder https://..."></div>
-    <div class="field full"><label for="appIconFile">Oder Icon-Datei auswählen</label><input id="appIconFile" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml"><div class="help">Ausgewählte Rasterbilder werden für die lokale Speicherung automatisch verkleinert.</div></div>
+    <div class="field full"><label for="appIconFile">Oder Icon-Datei auswählen</label><input id="appIconFile" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml"><div class="help">Neue Icons werden automatisch auf maximal 180 × 180 Pixel verkleinert und platzsparend als WebP gespeichert. Kleine SVGs bleiben erhalten.</div></div>
     <div class="reorder-box" id="appReorderBox" hidden><div class="reorder-title">Reihenfolge in dieser Kategorie</div><div class="reorder-actions"><button id="moveAppEarlierBtn" type="button">← Nach vorne</button><button id="moveAppLaterBtn" type="button">Nach hinten →</button></div><div class="help">Die Reihenfolge wird lokal gespeichert und beim nächsten „GitHub-Dateien erstellen“ dauerhaft in apps.json übernommen.</div></div>
   </div></div><div class="dialog-actions"><button class="danger-btn" id="deleteAppBtn" type="button" hidden>App löschen</button><button class="secondary-btn" id="cancelAppBtn" type="button">Abbrechen</button><button class="save-btn" id="saveAppBtn" value="default" type="submit">Speichern</button></div></form></dialog>
 
@@ -136,7 +184,7 @@ async function loadData(){
     data=clone(DEFAULT_DATA);hasLocalDraft=false;updateDataStatus();
   }
 }
-function saveData(){localStorage.setItem(STORAGE_KEY,JSON.stringify({dirty:true,data}));hasLocalDraft=true;updateDataStatus()}
+function saveData(){localStorage.setItem(STORAGE_KEY,JSON.stringify({dirty:true,data}));hasLocalDraft=true;updateDataStatus();window.dispatchEvent(new Event('huschel:app-change'))}
 function updateDataStatus(){const el=$('dataStatus');if(el)el.textContent=hasLocalDraft?'● Lokale Änderungen – noch nicht veröffentlicht':'☁ GitHub-Stand';const warning=$('publishWarning');if(warning)warning.classList.toggle('show',hasLocalDraft)}
 async function checkGithubStatus(){
   try{
@@ -158,8 +206,88 @@ function sameCategoryProjects(categoryId){return data.projects.filter(p=>p.categ
 function updateReorderButtons(){const box=$('appReorderBox');if(!editingId){box.hidden=true;return}box.hidden=false;const p=data.projects.find(x=>x.id===editingId);if(!p)return;const list=sameCategoryProjects(p.categoryId);const i=list.findIndex(x=>x.id===editingId);$('moveAppEarlierBtn').disabled=i<=0;$('moveAppLaterBtn').disabled=i<0||i>=list.length-1}
 function moveEditingApp(direction){if(!editingId)return;const p=data.projects.find(x=>x.id===editingId);if(!p)return;const same=sameCategoryProjects(p.categoryId);const pos=same.findIndex(x=>x.id===editingId);const other=same[pos+direction];if(!other)return;const a=data.projects.findIndex(x=>x.id===p.id),b=data.projects.findIndex(x=>x.id===other.id);[data.projects[a],data.projects[b]]=[data.projects[b],data.projects[a]];saveData();renderAll();updateReorderButtons()}
 function openAppDialog(id=null){editingId=id;const p=id?data.projects.find(x=>x.id===id):null;$('appDialogTitle').textContent=p?'App bearbeiten':'App hinzufügen';$('appName').value=p?.name||'';$('appDescription').value=p?.description||'';$('appLiveUrl').value=p?.liveUrl||'';$('appReadmeUrl').value=p?.readmeUrl||'';$('appEmoji').value=p?.emoji||'';$('appIconUrl').value=p?.iconUrl||'';$('appIconFile').value='';fillCategorySelect(p?.categoryId||(activeCategory!=='all'?activeCategory:data.categories[0]?.id));$('deleteAppBtn').hidden=!p;$('appDialog').showModal();updateReorderButtons()}
-async function fileToIconData(file){if(!file)return '';if(file.type==='image/svg+xml'){return await file.text().then(t=>'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(t))}return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>{const img=new Image();img.onload=()=>{const max=256,scale=Math.min(1,max/Math.max(img.width,img.height));const c=document.createElement('canvas');c.width=Math.max(1,Math.round(img.width*scale));c.height=Math.max(1,Math.round(img.height*scale));c.getContext('2d').drawImage(img,0,0,c.width,c.height);resolve(c.toDataURL('image/png',.9))};img.onerror=reject;img.src=reader.result};reader.onerror=reject;reader.readAsDataURL(file)})}
-$('appForm').addEventListener('submit',async e=>{if(e.submitter?.value==='cancel')return; e.preventDefault();const name=$('appName').value.trim();if(!name)return;let iconData='';const file=$('appIconFile').files[0];if(file){try{iconData=await fileToIconData(file)}catch(err){alert('Das Icon konnte nicht verarbeitet werden.')}}const isNew=!editingId;const base=editingId?data.projects.find(p=>p.id===editingId):{id:uid('app')};const oldCategory=base.categoryId;const newCategory=$('appCategory').value;base.name=name;base.description=$('appDescription').value.trim();base.liveUrl=$('appLiveUrl').value.trim();base.readmeUrl=$('appReadmeUrl').value.trim();base.categoryId=newCategory;base.emoji=$('appEmoji').value.trim()||'📱';base.iconUrl=$('appIconUrl').value.trim();if(iconData)base.iconData=iconData;else if(base.iconUrl&&editingId===null)delete base.iconData;if(isNew)data.projects.push(base);else if(oldCategory!==newCategory){data.projects=data.projects.filter(p=>p.id!==base.id);const indices=data.projects.map((p,i)=>p.categoryId===newCategory?i:-1).filter(i=>i>=0);const insertAt=indices.length?indices[indices.length-1]+1:data.projects.length;data.projects.splice(insertAt,0,base)}saveData();$('appDialog').close();renderAll()});
+// Kleine Raster-Icons statt großer PNG-Base64-Daten in apps.json.
+const ICON_MAX_EDGE = 180;
+const ICON_TARGET_BYTES = 28000;
+const ICON_QUALITY = [0.80, 0.72, 0.64, 0.56];
+const ICON_SIZES = [180, 160, 128];
+const SVG_SMALL_LIMIT = 12000;
+function dataUriBytes(uri){
+  if (!uri.startsWith('data:')) return 0;
+  if (/;base64,/i.test(uri)) return Math.floor((uri.split(',',2)[1]||'').length*3/4);
+  return new Blob([uri]).size;
+}
+function loadEmbeddedImage(uri){
+  return new Promise((resolve,reject)=>{
+    const image=new Image();
+    image.onload=()=>resolve(image);
+    image.onerror=()=>reject(Error('Ein eingebettetes Icon konnte nicht als Bild geöffnet werden.'));
+    image.src=uri;
+  });
+}
+async function iconToSmallWebp(uri){
+  const image=await loadEmbeddedImage(uri);
+  if(!image.naturalWidth||!image.naturalHeight)throw Error('Ungültige Icon-Abmessungen.');
+  // Bereits ausreichend kleine WebP-Dateien werden verlustfrei unverändert gelassen.
+  if(uri.startsWith('data:image/webp;base64,') &&
+     Math.max(image.naturalWidth,image.naturalHeight)<=ICON_MAX_EDGE &&
+     dataUriBytes(uri)<=ICON_TARGET_BYTES) return uri;
+  let smallest=null;
+  for(const edge of ICON_SIZES){
+    const ratio=Math.min(1,edge/Math.max(image.naturalWidth,image.naturalHeight));
+    const canvas=document.createElement('canvas');
+    canvas.width=Math.max(1,Math.round(image.naturalWidth*ratio));
+    canvas.height=Math.max(1,Math.round(image.naturalHeight*ratio));
+    const ctx=canvas.getContext('2d');
+    if(!ctx)throw Error('Canvas wird auf diesem Gerät nicht unterstützt.');
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.drawImage(image,0,0,canvas.width,canvas.height);
+    for(const quality of ICON_QUALITY){
+      const webp=canvas.toDataURL('image/webp',quality);
+      if(!webp.startsWith('data:image/webp;base64,'))
+        throw Error('Dieser Browser unterstützt keinen WebP-Export. Icon nicht verändert.');
+      const size=dataUriBytes(webp);
+      if(!smallest || size<smallest.size) smallest={value:webp,size};
+      if(size<=ICON_TARGET_BYTES)return webp;
+    }
+  }
+  return smallest.value;
+}
+async function fileToIconData(file){
+  if(!file)return '';
+  if(!['image/png','image/jpeg','image/webp','image/svg+xml'].includes(file.type))
+    throw Error('Bitte PNG, JPEG, WebP oder SVG auswählen.');
+  if(file.type==='image/svg+xml'){
+    const text=await file.text();
+    const uri='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(text);
+    if(dataUriBytes(uri)<=SVG_SMALL_LIMIT)return uri;
+    return iconToSmallWebp(uri);
+  }
+  const url=URL.createObjectURL(file);
+  try{return await iconToSmallWebp(url)}
+  finally{URL.revokeObjectURL(url)}
+}
+// Optimiert auch ältere Daten aus lokalem Entwurf, Cloud und JSON-Backups.
+// Änderungen werden erst übernommen, wenn die vollständige Konvertierung gelungen ist.
+async function compactAppIcons(){
+  const clean=clone(data);
+  let changed=0, before=0, after=0;
+  for(const project of clean.projects){
+    const uri=project.iconData;
+    if(typeof uri!=='string'||!uri.startsWith('data:image/'))continue;
+    before+=dataUriBytes(uri);
+    if(uri.startsWith('data:image/svg+xml') && dataUriBytes(uri)<=SVG_SMALL_LIMIT){
+      after+=dataUriBytes(uri);continue;
+    }
+    const next=await iconToSmallWebp(uri);
+    if(next!==uri){project.iconData=next;changed++}
+    after+=dataUriBytes(next);
+  }
+  if(changed){data=clean;saveData();renderAll()}
+  return {changed,before,after};
+}
+
+$('appForm').addEventListener('submit',async e=>{if(e.submitter?.value==='cancel')return; e.preventDefault();const name=$('appName').value.trim();if(!name)return;let iconData='';const file=$('appIconFile').files[0];if(file){try{iconData=await fileToIconData(file)}catch(err){alert('Das Icon konnte nicht verarbeitet werden: '+(err?.message||err));return}}const isNew=!editingId;const base=editingId?data.projects.find(p=>p.id===editingId):{id:uid('app')};const oldCategory=base.categoryId;const newCategory=$('appCategory').value;base.name=name;base.description=$('appDescription').value.trim();base.liveUrl=$('appLiveUrl').value.trim();base.readmeUrl=$('appReadmeUrl').value.trim();base.categoryId=newCategory;base.emoji=$('appEmoji').value.trim()||'📱';base.iconUrl=$('appIconUrl').value.trim();if(iconData)base.iconData=iconData;else if(base.iconUrl&&editingId===null)delete base.iconData;if(isNew)data.projects.push(base);else if(oldCategory!==newCategory){data.projects=data.projects.filter(p=>p.id!==base.id);const indices=data.projects.map((p,i)=>p.categoryId===newCategory?i:-1).filter(i=>i>=0);const insertAt=indices.length?indices[indices.length-1]+1:data.projects.length;data.projects.splice(insertAt,0,base)}saveData();$('appDialog').close();renderAll()});
 $('deleteAppBtn').onclick=()=>{if(!editingId)return;const p=data.projects.find(x=>x.id===editingId);if(confirm(`„${p.name}“ wirklich aus dem Chillout Lab löschen?`)){data.projects=data.projects.filter(x=>x.id!==editingId);saveData();$('appDialog').close();renderAll()}};
 const closeAppDialog=()=>{editingId=null;$('appForm').reset();$('appDialog').close()};
 $('closeAppDialog').onclick=closeAppDialog;
@@ -171,11 +299,20 @@ function renderCategoryManager(){const box=$('categoryList');box.innerHTML='';da
 function deleteCategory(id){const c=data.categories.find(x=>x.id===id);if(!c)return;if(data.categories.length===1){alert('Mindestens eine eigene Kategorie muss erhalten bleiben.');return}if(!confirm(`Kategorie „${c.name}“ löschen?`))return;let fallback=data.categories.find(x=>x.id==='general'&&x.id!==id)||data.categories.find(x=>x.id!==id);data.projects.forEach(p=>{if(p.categoryId===id)p.categoryId=fallback.id});data.categories=data.categories.filter(x=>x.id!==id);if(activeCategory===id)activeCategory='all';saveData();renderCategoryManager();renderAll()}
 
 function downloadBlob(filename,blob){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}
-function exportGithubFiles(){
-  const clean=clone(data);
-  const json=JSON.stringify(clean,null,2)+'\n';
-  downloadBlob('apps.json',new Blob([json],{type:'application/json;charset=utf-8'}));
-  alert('apps.json wurde erstellt.\n\nLade diese Datei in dein Chillout-Lab-Repository und ersetze dort die vorhandene apps.json. Neue, über die App ausgewählte Icons sind bereits direkt in dieser Datei enthalten. Danach die Chillout-Lab-Seite neu laden oder auf „GitHub prüfen“ klicken. Mac, iPad und iPhone übernehmen dann denselben GitHub-Stand.');
+async function exportGithubFiles(){
+  const button=$('exportGithubBtn');
+  button.disabled=true;
+  try{
+    // Sicherheitsnetz: auch Icons aus alten lokalen oder privaten Datenständen verkleinern.
+    const optimized=await compactAppIcons();
+    const clean=clone(data);
+    const json=JSON.stringify(clean,null,2)+'\n';
+    downloadBlob('apps.json',new Blob([json],{type:'application/json;charset=utf-8'}));
+    const hint=optimized.changed
+      ? `\n\n${optimized.changed} eingebettete Icons wurden zusätzlich verkleinert.` : '';
+    alert('Optimierte apps.json wurde erstellt.'+hint+'\n\nLade diese Datei in dein Chillout-Lab-Repository und ersetze dort die vorhandene apps.json. Danach die Chillout-Lab-Seite neu laden oder auf „GitHub prüfen“ klicken. Der private Huschel-Speicher wird dadurch NICHT automatisch überschrieben.');
+  }catch(err){alert('apps.json wurde nicht exportiert: '+(err?.message||err))}
+  finally{button.disabled=false}
 }
 $('exportGithubBtn').onclick=exportGithubFiles;
 $('checkGithubBtn').onclick=checkGithubStatus;
@@ -193,7 +330,21 @@ $('createHomeIconPackBtn').onclick=async()=>{const p=data.projects.find(x=>x.id=
 $('manageCategoriesBtn').onclick=()=>{renderCategoryManager();$('categoryDialog').showModal()};$('closeCategoryDialog').onclick=()=>$('categoryDialog').close();$('addCategoryBtn').onclick=()=>{const c={id:uid('cat'),name:'Neue Kategorie'};data.categories.push(c);saveData();renderCategoryManager();renderTabs()};
 function simpleMarkdown(md){return escapeHtml(md).replace(/^### (.*)$/gm,'<h3>$1</h3>').replace(/^## (.*)$/gm,'<h2>$1</h2>').replace(/^# (.*)$/gm,'<h1>$1</h1>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>').replace(/^- (.*)$/gm,'<div>• $1</div>').replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')}
 async function openReadme(p){const url=buildReadmeUrl(p);if(!url)return;$('readmeTitle').textContent='README · '+p.name;$('readmeContent').innerHTML='<p>README wird geladen …</p>';$('readmeDialog').showModal();try{const r=await fetch(url,{cache:'no-cache'});if(!r.ok)throw 0;const t=await r.text();$('readmeContent').innerHTML='<p>'+simpleMarkdown(t)+'</p>'}catch(e){$('readmeContent').innerHTML='<p>Die README konnte hier nicht direkt geladen werden.</p><p><a href="'+escapeHtml(url)+'" target="_blank" rel="noopener">README direkt öffnen</a></p>'}}
-$('closeReadmeDialog').onclick=()=>$('readmeDialog').close();$('year').textContent=new Date().getFullYear();(async()=>{await loadData();renderAll();updateDataStatus()})();
+$('closeReadmeDialog').onclick=()=>$('readmeDialog').close();$('year').textContent=new Date().getFullYear();
+// Additive Schnittstelle zum separaten Speichermodul – bestehende Datenlogik bleibt maßgeblich.
+let huschelDataReady=false;
+window.HuschelChilloutBridge=Object.freeze({
+  ready:()=>huschelDataReady,
+  read:()=>clone(data),
+  // Frischer, nicht gecachter Stand der veröffentlichten apps.json; kein Seiteneffekt.
+  published:()=>fetchRemoteData(),
+  optimizeIcons:()=>compactAppIcons(),
+  // Explizit ausgewählte öffentliche apps.json: Entwurf korrekt als veröffentlicht bereinigen.
+  applyPublished:(snapshot)=>{if(!validData(snapshot))throw Error('Ungültige apps.json.');data=clone(snapshot);clearLocalDraft();renderAll();window.dispatchEvent(new Event('huschel:app-change'))},
+  apply:(snapshot)=>{if(!validData(snapshot))throw Error('Ungültige Chillout-Lab-Daten.');data=clone(snapshot);saveData();renderAll()}
+});
+(async()=>{await loadData();renderAll();updateDataStatus();huschelDataReady=true;window.dispatchEvent(new Event('huschel:app-ready'))})();
 </script>
+<script type="module" src="huschel-speicher.js"></script>
 </body>
 </html>

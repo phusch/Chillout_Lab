@@ -171,3 +171,8 @@ Die verwendeten App-Icons, `apps.json`, `manifest.json` und die bestehende Anwen
 
 **Chillout Lab V3.7.1**  
 Persönliche Startplattform für die eigenen Apps.
+
+
+## Ergänzung V3.8.3 – Icon-Optimierung
+
+Die eingebetteten PNG-Icons in `apps.json` wurden auf 180-Pixel-WebP-Bilder verkleinert. Der neue Bildimport optimiert hochgeladene Icons automatisch. Im eigenständigen Huschel-Speichermodul gibt es einen Button zur Bereinigung älterer Datenstände; bei der Erstellung einer neuen `apps.json` werden eingebettete Bilder ebenfalls vor dem Export optimiert. Ein vorhandenes Backend der V3.8.2 muss dafür nicht erneut veröffentlicht werden. Die genaue sichere Umstellungsreihenfolge steht in `README_SPEICHER.txt`.
