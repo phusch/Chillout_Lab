@@ -10,6 +10,7 @@ let supabase = null, authenticated = false, sha = undefined, revision = 0;
 let savedAt = null, busy = false, remoteTestData = false, cloudMatches = false, oldScroll = 0;
 let cloudSource = null, cloudData = null, pendingConflict = null, approvedHash = null;
 let remoteExists = false;
+let sessionExpiresAt = null; // Ausschließlich zur korrekten Anzeige einer abgelaufenen Anmeldung.
 // Herkunft des tatsächlich sichtbaren Datensatzes – unabhängig vom geladenen GitHub-Snapshot.
 let activeSource = null;
 const bridge = window.HuschelChilloutBridge;
@@ -34,14 +35,50 @@ function setAuth(yes, email = '') {
   $('hsLoginFields').hidden = yes;
   $('hsLogout').hidden = !yes;
   $('hsLoggedEmail').textContent = yes ? email : '';
+  $('hsAuthCard').classList.toggle('hs-auth-ok', yes);
+  $('hsAuthStatus').className = 'hs-auth-status' + (yes ? ' hs-auth-success' : '');
+  $('hsAuthStatus').textContent = yes
+    ? '🟢 Angemeldet · Supabase-Zugang aktiv'
+    : '⚪ Nicht angemeldet · für GitHub-Speicherzugriff bitte anmelden';
 }
-async function task(fn) {
+function expireAuthIfNeeded() {
+  if (!authenticated || !sessionExpiresAt || Date.now() < sessionExpiresAt) return false;
+  setAuth(false);
+  sessionExpiresAt = null;
+  $('hsAuthStatus').className = 'hs-auth-status hs-auth-error';
+  $('hsAuthStatus').textContent = '🔴 Anmeldung abgelaufen · bitte erneut anmelden';
+  lamp('Anmeldung abgelaufen – bitte erneut anmelden');
+  log('Die Supabase-Sitzung ist abgelaufen. Bestehende App-Daten wurden nicht verändert.');
+  return true;
+}
+async function task(fn, action = 'Aktion') {
   if (busy) return;
   busy = true;
   document.querySelectorAll('#hsStorageView button').forEach(button => button.disabled = true);
   try { await fn(); }
-  catch(error) { lamp('Aktion abgebrochen – keine GitHub-Änderung', 'error'); log(error?.message || String(error)); }
+  catch(error) {
+    const detail = String(error?.message || error || 'Unbekannter Fehler');
+    const short = detail.replace(/\s+/g, ' ').slice(0, 105) + (detail.length > 105 ? '…' : '');
+    if (action === 'Anmeldung') {
+      setAuth(false);
+      sessionExpiresAt = null;
+      $('hsAuthStatus').className = 'hs-auth-status hs-auth-error';
+      $('hsAuthStatus').textContent = '🔴 Anmeldung fehlgeschlagen · Zugangsdaten und Bestätigung prüfen';
+    }
+    // Fehlgeschlagene Schreibaufrufe dürfen nicht als garantiert unverändertes GitHub bezeichnet werden:
+    // Wenn die Antwort ausbleibt, muss der echte Repository-Stand erneut geprüft werden.
+    const headline = action === 'GitHub Speichern'
+      ? 'GitHub-Speicherung nicht bestätigt'
+      : action + ' fehlgeschlagen';
+    lamp(headline + ': ' + short, 'error');
+    log(`${headline}. Grund: ${detail}` +
+      (action === 'GitHub Speichern' ? '\nBitte vor einem weiteren Speichern mit „GitHub Laden“ den tatsächlichen GitHub-Stand prüfen.' : ''));
+  }
   finally { busy = false; document.querySelectorAll('#hsStorageView button').forEach(button => button.disabled = false); }
+}
+function cancelled(title, detail) {
+  lamp(title, 'pending');
+  log(detail);
 }
 
 function canonical(value) {
@@ -111,6 +148,7 @@ function openView() {
   oldScroll = window.scrollY;
   $('labMainPage').hidden = true;
   $('hsStorageView').hidden = false;
+  expireAuthIfNeeded();
   metadata();
   window.scrollTo(0,0);
   void inspectOnOpen();
@@ -139,21 +177,22 @@ $('hsLogin').addEventListener('click', () => task(async () => {
       await supabase.auth.signOut();
       throw Error('Dieses Supabase-Konto ist nicht für Huschel App Speicher freigeschaltet.');
     }
-    authenticated = true;
+    sessionExpiresAt = data.session?.expires_at ? data.session.expires_at * 1000 : null;
     setAuth(true, email);
     try { localStorage.setItem(KEY_SETTING, key); } catch {}
-    lamp('Angemeldet · GitHub-Datenstand noch nicht geprüft');
-    log('Anmeldung erfolgreich. Zum Prüfen des privaten Speicherstands „GitHub Laden“ wählen.');
+    lamp('GitHub-Datenstand noch nicht geprüft – bitte GitHub Laden wählen');
+    log('Supabase-Anmeldung erfolgreich. Der Anmeldestatus ist grün; die GitHub-Daten selbst sind erst nach „GitHub Laden“ geprüft.');
   } finally { $('hsPassword').value = ''; }
-}));
+}, 'Anmeldung'));
 $('hsLogout').addEventListener('click', () => task(async () => {
   if (supabase) await supabase.auth.signOut();
-  supabase = null; authenticated = false; sha = undefined; savedAt = null; revision = 0;
+  supabase = null; authenticated = false; sessionExpiresAt = null; sha = undefined; savedAt = null; revision = 0;
   cloudSource = null; cloudData = null; remoteExists = false; approvedHash = null;
   // Kein Zurücksetzen von activeSource: Die App-Daten bleiben auch nach Logout sichtbar.
   clearConflict(); setAuth(false); metadata(); lamp('Abgemeldet'); log('Sitzung beendet.');
-}));
+}, 'Abmeldung'));
 async function invoke(body) {
+  expireAuthIfNeeded();
   if (!authenticated || !supabase) throw Error('Bitte zuerst mit deinem Supabase-Konto anmelden.');
   const { data, error } = await supabase.functions.invoke('github-app-storage', { body });
   if (error) {
@@ -202,9 +241,11 @@ $('hsGithubLoad').addEventListener('click', () => task(async () => {
     conflict('load', pub, result.data, cloudSource);
     return;
   }
-  if (result.exists && !sameData(current, result.data)) {
+  const dataWasDifferent = result.exists && !sameData(current, result.data);
+  if (dataWasDifferent) {
     if (!confirm('GitHub Laden ersetzt die aktuellen Chillout-Lab-Daten in dieser App.\n\nBitte bei Bedarf vorher ein JSON-Backup erstellen.\n\nWirklich den GitHub-Stand übernehmen?')) {
-      log('Laden abgebrochen: Die aktuellen App-Daten wurden nicht verändert.');
+      cancelled('GitHub Laden von dir abgebrochen – App-Daten unverändert',
+        'Du hast das Ersetzen der aktuellen App-Daten abgelehnt. Es wurden keine Daten übernommen oder auf GitHub geschrieben.');
       return;
     }
     bridge.apply(result.data);
@@ -215,13 +256,15 @@ $('hsGithubLoad').addEventListener('click', () => task(async () => {
   cloudMatches = result.exists && sameData(bridge.read(), result.data);
   metadata();
   if (result.exists) {
-    lamp('GitHub-Daten erfolgreich geladen', 'ok');
-    log(`GitHub-Laden erfolgreich. Revision ${revision}. Öffentliche apps.json und privater Speicher bleiben getrennt.`);
+    lamp(dataWasDifferent ? 'GitHub-Daten erfolgreich geladen' : 'Daten bereits identisch – kein Austausch erforderlich', 'ok');
+    log(dataWasDifferent
+      ? `GitHub-Laden erfolgreich. Revision ${revision}. Öffentliche apps.json und privater Speicher bleiben getrennt.`
+      : `GitHub geprüft: Die geöffneten App-Daten stimmen bereits mit GitHub-Revision ${revision} überein. Nichts wurde ersetzt.`);
   } else {
     lamp('Noch kein GitHub-Datenstand – Speichern jetzt möglich');
     log('Noch keine private GitHub-Datei vorhanden. Die aktuellen App-Daten wurden nicht verändert.');
   }
-}));
+}, 'GitHub Laden'));
 $('hsGithubSave').addEventListener('click', () => task(async () => {
   if (sha === undefined) throw Error('Bitte zuerst GitHub Laden auswählen, damit wir die aktuelle GitHub-Version kennen.');
   await verifyBackendVersion();
@@ -235,7 +278,11 @@ $('hsGithubSave').addEventListener('click', () => task(async () => {
     conflict('save', pub, data, cloudSource);
     return;
   }
-  if (remoteTestData && !confirm('Auf GitHub liegt noch der frühere Testdatensatz.\n\nDurch die ECHTEN Chillout-Lab-Daten ersetzen?')) return;
+  if (remoteTestData && !confirm('Auf GitHub liegt noch der frühere Testdatensatz.\n\nDurch die ECHTEN Chillout-Lab-Daten ersetzen?')) {
+    cancelled('GitHub Speichern von dir abgebrochen – alter Teststand bleibt bestehen',
+      'Du hast das Ersetzen des früheren GitHub-Testdatensatzes abgelehnt. Es wurde keine neue Speicherung angestoßen.');
+    return;
+  }
   // Niemals eine alte private Version als aus einer neuen apps.json entstanden ausgeben.
   const source = localIsPublished || baselineIsCurrent
     ? { kind:'published-apps-json', sha256:pub.hash }
@@ -252,13 +299,17 @@ $('hsGithubSave').addEventListener('click', () => task(async () => {
     lamp('Sicher auf GitHub gespeichert', 'ok');
     log(`GitHub-Speicherung erfolgreich · Revision ${revision}. Der öffentliche apps.json-Stand wurde nicht verändert.`);
   }
-}));
+}, 'GitHub Speichern'));
 $('hsUsePublished').addEventListener('click', () => task(async () => {
   if (!pendingConflict) return;
   const expectedHash = pendingConflict.pub.hash;
   const pub = await published();
   if (pub.hash !== expectedHash) throw Error('apps.json wurde inzwischen erneut geändert. Bitte GitHub Laden und Versionsvergleich wiederholen.');
-  if (!sameData(bridge.read(), pub.data) && !confirm('Die veröffentlichte apps.json übernehmen?\n\nAktuelle lokale Änderungen und Bilder in dieser App werden ersetzt. Bitte bei Bedarf vorher ein JSON-Backup erstellen.')) return;
+  if (!sameData(bridge.read(), pub.data) && !confirm('Die veröffentlichte apps.json übernehmen?\n\nAktuelle lokale Änderungen und Bilder in dieser App werden ersetzt. Bitte bei Bedarf vorher ein JSON-Backup erstellen.')) {
+    cancelled('Übernahme der apps.json von dir abgebrochen – App-Daten unverändert',
+      'Die veröffentlichte apps.json wurde nicht übernommen. Die Versionsauswahl bleibt offen.');
+    return;
+  }
   bridge.applyPublished(pub.data);
   activeSource = { kind:'published-apps-json', sha256:pub.hash };
   cloudMatches = false;
@@ -266,7 +317,7 @@ $('hsUsePublished').addEventListener('click', () => task(async () => {
   clearConflict();
   lamp('Aktuelle apps.json übernommen – noch nicht privat gespeichert');
   log('Die veröffentlichte apps.json wurde übernommen. Öffentlicher Stand bleibt unverändert. Zum Aktualisieren des privaten Backups jetzt „GitHub Speichern“ wählen.');
-}));
+}, 'Aktuelle apps.json übernehmen'));
 $('hsUsePrivate').addEventListener('click', () => task(async () => {
   if (!pendingConflict) return;
   const choice = pendingConflict;
@@ -275,7 +326,11 @@ $('hsUsePrivate').addEventListener('click', () => task(async () => {
   if (choice.mode === 'load') {
     if (!isAppData(choice.candidate)) throw Error('Privater Datenstand ungültig.');
     const label = choice.mode === 'local' ? 'lokalen Stand' : choice.mode === 'backup' ? 'JSON-Backup' : 'privaten GitHub-Stand';
-    if (!confirm('ACHTUNG: Der ' + label + ' weicht von der veröffentlichten apps.json ab.\n\nNeue oder verkleinerte Bilder können durch ältere ersetzt werden.\n\nTrotzdem in Chillout Lab übernehmen?')) return;
+    if (!confirm('ACHTUNG: Der ' + label + ' weicht von der veröffentlichten apps.json ab.\n\nNeue oder verkleinerte Bilder können durch ältere ersetzt werden.\n\nTrotzdem in Chillout Lab übernehmen?')) {
+      cancelled('Älteren Datenstand nicht übernommen – Entscheidung abgebrochen',
+        'Du hast die Übernahme des abweichenden Datenstands abgelehnt. Die aktuellen App-Daten sind unverändert.');
+      return;
+    }
     bridge.apply(choice.candidate);
     activeSource = choice.source?.kind === 'published-apps-json' ? choice.source : null;
     cloudMatches = choice.mode === 'load';
@@ -284,13 +339,17 @@ $('hsUsePrivate').addEventListener('click', () => task(async () => {
     lamp('Abweichender Stand geladen – apps.json weicht ab');
     log('Abweichenden Stand bewusst geladen. GitHub wurde nicht geändert. Bei einer späteren privaten Speicherung erfolgt erneut die Versionsprüfung.');
   } else {
-    if (!confirm('Die aktuellen App-Daten weichen von der veröffentlichten apps.json ab.\n\nDiese Daten bewusst als privaten Stand behalten und anschließend speichern?')) return;
+    if (!confirm('Die aktuellen App-Daten weichen von der veröffentlichten apps.json ab.\n\nDiese Daten bewusst als privaten Stand behalten und anschließend speichern?')) {
+      cancelled('Abweichenden Stand nicht bestätigt – noch nichts auf GitHub gespeichert',
+        'Du hast die Freigabe des abweichenden Datenstands abgelehnt. Es wurde keine GitHub-Speicherung angestoßen.');
+      return;
+    }
     approvedHash = fresh.hash;
     clearConflict();
     lamp('Abweichenden Stand bestätigt – GitHub noch nicht geändert');
     log('Daten beibehalten. „GitHub Speichern“ muss erneut gewählt werden. Die Herkunft einer älteren Version wird dabei nicht verschleiert.');
   }
-}));
+}, 'Abweichenden Speicherstand übernehmen'));
 $('hsCancelConflict').addEventListener('click', () => {
   clearConflict(); approvedHash = null;
   lamp('Versionsauswahl abgebrochen – keine Daten verändert');
@@ -343,13 +402,13 @@ $('hsOptimizeIcons').addEventListener('click', () => task(async () => {
   }else{
     log('Alle eingebetteten Icons sind bereits klein. App-Daten und GitHub wurden nicht verändert.');
   }
-}));
+}, 'Icons optimieren'));
 $('hsLocalSave').addEventListener('click', () => task(async () => {
   const pub = await published();
   await localPut({ format:'huschel-backup-v1', app:APP_ID, savedAt:new Date().toISOString(),
     source:sourceForCurrentData(pub), data:bridge.read() });
   log('Lokale Gerätekopie gespeichert, mit Versionszuordnung soweit möglich. GitHub bleibt unverändert.');
-}));
+}, 'Lokal speichern'));
 $('hsLocalLoad').addEventListener('click', () => task(async () => {
   const stored = await localGet();
   if (!stored || !isAppData(stored.data)) throw Error('Kein gültiger lokaler Speicherstand gefunden.');
@@ -357,12 +416,16 @@ $('hsLocalLoad').addEventListener('click', () => task(async () => {
   if (!cloudHasMatchingOrigin(stored.data, stored.source, pub)) {
     conflict('local', pub, stored.data, stored.source); return;
   }
-  if (!confirm('Lokale Gerätekopie laden? Die aktuell geöffneten App-Daten werden ersetzt.')) return;
+  if (!confirm('Lokale Gerätekopie laden? Die aktuell geöffneten App-Daten werden ersetzt.')) {
+    cancelled('Lokales Laden von dir abgebrochen – App-Daten unverändert',
+      'Die lokale Gerätekopie wurde nicht übernommen. GitHub blieb unberührt.');
+    return;
+  }
   bridge.apply(stored.data);
   activeSource = stored.source?.kind === 'published-apps-json'
     ? stored.source : { kind:'published-apps-json', sha256:pub.hash };
   log('Lokale Daten geladen. Diese Änderungen sind noch nicht auf GitHub gespeichert.');
-}));
+}, 'Lokal laden'));
 $('hsExport').addEventListener('click', () => task(async () => {
   const pub = await published();
   const backup = { format:'huschel-backup-v1', app:APP_ID, exportedAt:new Date().toISOString(),
@@ -375,7 +438,7 @@ $('hsExport').addEventListener('click', () => task(async () => {
   document.body.appendChild(anchor); anchor.click(); anchor.remove();
   setTimeout(() => URL.revokeObjectURL(objectUrl), 1500);
   log('JSON-Backup erstellt. Die GitHub-Daten wurden nicht verändert.');
-}));
+}, 'JSON-Backup erstellen'));
 $('hsImport').addEventListener('click', () => $('hsFile').click());
 $('hsFile').addEventListener('change', () => task(async () => {
   const file = $('hsFile').files?.[0];
@@ -389,10 +452,14 @@ $('hsFile').addEventListener('change', () => task(async () => {
     if (!cloudHasMatchingOrigin(backup.data, backup.source, pub)) {
       conflict('backup', pub, backup.data, backup.source); return;
     }
-    if (!confirm('JSON-Backup laden? Die aktuellen App-Daten werden ersetzt.')) return;
+    if (!confirm('JSON-Backup laden? Die aktuellen App-Daten werden ersetzt.')) {
+      cancelled('JSON-Backup-Laden von dir abgebrochen – App-Daten unverändert',
+        'Das JSON-Backup wurde nicht übernommen. GitHub blieb unberührt.');
+      return;
+    }
     bridge.apply(backup.data);
     activeSource = backup.source?.kind === 'published-apps-json'
       ? backup.source : { kind:'published-apps-json', sha256:pub.hash };
     log('JSON-Backup geladen. GitHub wurde nicht verändert; bei Bedarf anschließend „GitHub Speichern“ wählen.');
   } finally { $('hsFile').value = ''; }
-}));
+}, 'JSON-Backup laden'));

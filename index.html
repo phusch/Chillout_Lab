@@ -62,6 +62,7 @@
     <div class="hs-shell">
       <div class="hs-top"><button type="button" id="hsBack" class="hs-back" aria-label="Zurück zur App">← Zurück</button><div><h1>Speichern &amp; Backup</h1><p>Huschel App Speicher · Chillout Lab</p></div></div>
       <div id="hsLamp" class="hs-lamp pending" role="status" aria-live="polite">🟡 GitHub-Speicher noch nicht geprüft</div>
+      <p class="hs-status-explain">Die Speicherampel zeigt den Status des GitHub-Datenstands oder der letzten Aktion. Der Anmeldestatus steht getrennt im Bereich „Anmeldung“.</p>
       <div id="hsMeta" class="hs-meta">Revision: – · Letzte GitHub-Speicherung: –</div>
       <p id="hsPublishedStatus" class="hs-source-status" role="status" aria-live="polite">Öffentliche apps.json wird beim Öffnen überprüft.</p>
       <section id="hsSourceConflict" class="hs-source-conflict" hidden aria-label="Abweichende Datenstände">
@@ -76,7 +77,8 @@
         <button type="button" id="hsGithubLoad" class="hs-btn hs-outline">☁️ GitHub Laden</button>
         <p class="hs-small">Vor der ersten Speicherung bitte einmal GitHub laden. Deine Daten liegen privat in <code>chillout-lab/data.json</code>.</p>
       </section>
-      <section class="hs-card"><h2>🔐 Anmeldung</h2>
+      <section id="hsAuthCard" class="hs-card hs-auth-card"><h2>🔐 Anmeldung</h2>
+        <p id="hsAuthStatus" class="hs-auth-status" role="status" aria-live="polite">⚪ Nicht angemeldet · für GitHub-Speicherzugriff bitte anmelden</p>
         <div id="hsLoggedIn" class="hs-small" hidden>Angemeldet als <strong id="hsLoggedEmail"></strong></div>
         <div id="hsLoginFields"><label for="hsKey">Supabase Publishable Key</label><input id="hsKey" type="text" placeholder="sb_publishable_…" spellcheck="false" autocomplete="off">
           <label for="hsEmail">E-Mail</label><input id="hsEmail" type="email" value="huschka@eventdesign.com" autocomplete="username">

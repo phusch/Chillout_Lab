@@ -37,3 +37,10 @@
 .hs-source-conflict p{font-size:.89rem;line-height:1.55;white-space:pre-line;margin:0 0 15px}
 .hs-source-conflict .hs-safe-choice{border:1px solid #53ca9a;background:#0d694d;color:#fff}
 .hs-source-conflict .hs-risk-choice{border:1px solid #efa853;background:rgba(255,160,49,.19);color:#fff3d7}
+
+/* V3.8.3.2 – getrennter, eindeutiger Anmeldestatus und Erklärung der Speicherampel */
+.hs-status-explain{margin:9px 2px 8px;color:rgba(247,251,255,.68);font-size:.76rem;line-height:1.45}
+.hs-auth-card.hs-auth-ok{border-color:#50c995;background:rgba(53,190,127,.12)}
+.hs-auth-status{padding:11px 13px;border:1px solid rgba(190,199,213,.30);background:rgba(255,255,255,.045);border-radius:11px;font-size:.86rem;font-weight:750;line-height:1.45;color:#e6ebf4}
+.hs-auth-status.hs-auth-success{border-color:#50c995;background:rgba(40,177,101,.22);color:#d6ffe9}
+.hs-auth-status.hs-auth-error{border-color:#f67b86;background:rgba(255,75,75,.13);color:#ffd6db}
